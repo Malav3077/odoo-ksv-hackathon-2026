@@ -6,6 +6,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from apps.accounts.models import User
+from apps.billing import services as bsvc
 from apps.billing.models import Invoice
 from apps.catalog.models import Category, Product, RentalConfig
 from apps.rentals import services as rsvc
@@ -90,7 +91,7 @@ class Command(BaseCommand):
         now = timezone.now()
 
         def make(product, qty, pickup, ret, confirm=True):
-            return rsvc.create_order(
+            order = rsvc.create_order(
                 customer=customer,
                 lines=[{"product": product, "quantity": qty}],
                 pickup_date=pickup,
@@ -99,6 +100,10 @@ class Command(BaseCommand):
                 created_by=admin,
                 confirm=confirm,
             )
+            if confirm:
+                bsvc.generate_invoice(order)
+                bsvc.record_payments(order)
+            return order
 
         # 1) Reserved, pickup in the future -> upcoming pickup
         make(products[0], 1, now + timedelta(days=1), now + timedelta(days=3))

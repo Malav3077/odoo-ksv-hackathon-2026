@@ -1,46 +1,57 @@
-from django.shortcuts import get_object_or_404, render
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from apps.common.permissions import IsAdminOrVendor
 from apps.rentals.models import RentalOrder
 
 from . import services
-from .models import Invoice
-from .serializers import InvoiceSerializer
+from .models import Invoice, Payment
+from .serializers import InvoiceSerializer, PaymentSerializer
 
 
-class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = InvoiceSerializer
+def _orders_for(user):
+    qs = RentalOrder.objects.all()
+    if user.role == "customer":
+        qs = qs.filter(customer=user)
+    return qs
 
-    def get_queryset(self):
-        user = self.request.user
-        qs = Invoice.objects.select_related("order", "customer").prefetch_related("lines")
-        if user.role == "customer":
-            return qs.filter(customer=user)
-        return qs
 
-    def get_permissions(self):
-        return [IsAuthenticated()]
+class OrderInvoiceView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=["post"], permission_classes=[IsAdminOrVendor])
-    def generate(self, request):
-        """Generate (or refresh) an invoice for a given order id."""
-        order_id = request.data.get("order")
-        if not order_id:
-            return Response(
-                {"detail": "order id is required."}, status=status.HTTP_400_BAD_REQUEST
-            )
-        order = get_object_or_404(RentalOrder, pk=order_id)
-        invoice = services.generate_invoice_for_order(order, user=request.user)
-        return Response(
-            InvoiceSerializer(invoice).data, status=status.HTTP_201_CREATED
+    def get(self, request, order_id):
+        order = get_object_or_404(_orders_for(request.user), pk=order_id)
+        invoice = services.generate_invoice(order)
+        return Response(InvoiceSerializer(invoice).data)
+
+
+class InvoicePDFView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        invoice = get_object_or_404(Invoice.objects.select_related("order"), pk=pk)
+        if request.user.role == "customer" and invoice.order.customer_id != request.user.id:
+            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+        buffer = services.render_invoice_pdf(invoice)
+        safe_name = invoice.invoice_number.replace("/", "-")
+        return FileResponse(
+            buffer,
+            as_attachment=True,
+            filename=f"{safe_name}.pdf",
+            content_type="application/pdf",
         )
 
-    @action(detail=True, methods=["get"], url_path="print")
-    def print_invoice(self, request, pk=None):
-        """Printable HTML invoice. Open in a browser and use Save as PDF."""
-        invoice = self.get_object()
-        return render(request, "billing/invoice.html", {"invoice": invoice})
+
+class PaymentListCreateView(generics.ListCreateAPIView):
+    serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Payment.objects.filter(order__in=_orders_for(self.request.user))
+
+    def perform_create(self, serializer):
+        serializer.save(status="success", paid_at=timezone.now())

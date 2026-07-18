@@ -1,61 +1,115 @@
-from decimal import Decimal
+import io
 
-from django.db import transaction
+from django.utils import timezone
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import mm
+from reportlab.pdfgen import canvas
 
-from apps.common.models import ActivityLog
-
-from .models import Invoice, InvoiceLine
-
-
-def _generate_number(invoice):
-    if not invoice.invoice_number:
-        invoice.invoice_number = f"INV{invoice.id:04d}"
-        invoice.save(update_fields=["invoice_number"])
+from .models import Invoice, Payment
 
 
-@transaction.atomic
-def generate_invoice_for_order(order, user=None):
-    """Create (or refresh) the invoice for a rental order.
-
-    Snapshots the order's line items plus a late-fee line when one applies,
-    so the invoice stays correct even after a return settles the deposit.
-    """
-    invoice = Invoice.objects.filter(order=order).first()
-    if invoice is None:
-        invoice = Invoice.objects.create(order=order, customer=order.customer)
-        _generate_number(invoice)
-
-    invoice.customer = order.customer
-    invoice.untaxed_amount = order.untaxed_amount
-    invoice.tax_amount = order.tax_amount
-    invoice.late_fee = order.late_fee_charged
-    invoice.security_deposit = order.security_deposit_held
-    invoice.deposit_refunded = order.deposit_refunded
-    invoice.total_amount = order.total_amount + order.late_fee_charged
-    invoice.status = "paid" if order.status in ("returned", "late_return") else "posted"
-    invoice.save()
-
-    invoice.lines.all().delete()
-    for line in order.lines.select_related("product"):
-        product_name = line.product.name if line.product else "Rental item"
-        InvoiceLine.objects.create(
-            invoice=invoice,
-            description=product_name,
-            quantity=line.quantity,
-            unit_price=line.unit_price,
-            amount=line.amount,
-        )
-    if order.late_fee_charged and order.late_fee_charged > Decimal("0"):
-        InvoiceLine.objects.create(
-            invoice=invoice,
-            description="Late return fee",
-            quantity=1,
-            unit_price=order.late_fee_charged,
-            amount=order.late_fee_charged,
-        )
-
-    ActivityLog.objects.create(
-        user=user or order.customer,
-        action=f"Generated {invoice.invoice_number} for {order.order_reference}",
+def generate_invoice(order):
+    invoice, created = Invoice.objects.get_or_create(
+        order=order,
+        defaults={
+            "status": "posted",
+            "untaxed_amount": order.untaxed_amount,
+            "tax_amount": order.tax_amount,
+            "total_amount": order.total_amount,
+        },
     )
+    if created and not invoice.invoice_number:
+        year = timezone.now().year
+        invoice.invoice_number = f"INV/{year}/{invoice.id:04d}"
+        invoice.save(update_fields=["invoice_number"])
     return invoice
+
+
+def record_payments(order):
+    now = timezone.now()
+    payments = []
+    payments.append(
+        Payment.objects.create(
+            order=order, amount=order.total_amount, payment_type="rental",
+            status="success", paid_at=now,
+        )
+    )
+    if order.security_deposit_held > 0:
+        payments.append(
+            Payment.objects.create(
+                order=order, amount=order.security_deposit_held,
+                payment_type="security_deposit", status="success", paid_at=now,
+            )
+        )
+    return payments
+
+
+def render_invoice_pdf(invoice):
+    order = invoice.order
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    pdf.setFillColor(colors.HexColor("#6B21A8"))
+    pdf.rect(0, height - 40 * mm, width, 40 * mm, fill=1, stroke=0)
+    pdf.setFillColor(colors.white)
+    pdf.setFont("Helvetica-Bold", 22)
+    pdf.drawString(20 * mm, height - 22 * mm, "RentEase")
+    pdf.setFont("Helvetica", 11)
+    pdf.drawString(20 * mm, height - 30 * mm, "Rental Management System")
+    pdf.drawRightString(width - 20 * mm, height - 22 * mm, "INVOICE")
+
+    y = height - 55 * mm
+    pdf.setFillColor(colors.black)
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawString(20 * mm, y, f"Invoice: {invoice.invoice_number}")
+    pdf.setFont("Helvetica", 10)
+    pdf.drawString(20 * mm, y - 6 * mm, f"Order: {order.order_reference}")
+    pdf.drawString(20 * mm, y - 12 * mm, f"Date: {invoice.invoice_date}")
+    pdf.drawString(20 * mm, y - 18 * mm, f"Customer: {order.customer.get_full_name() or order.customer.username}")
+    pdf.drawString(20 * mm, y - 24 * mm, f"Status: {invoice.get_status_display()}")
+
+    y -= 38 * mm
+    pdf.setFillColor(colors.HexColor("#F3E8FF"))
+    pdf.rect(20 * mm, y, width - 40 * mm, 8 * mm, fill=1, stroke=0)
+    pdf.setFillColor(colors.black)
+    pdf.setFont("Helvetica-Bold", 10)
+    pdf.drawString(22 * mm, y + 2.5 * mm, "Product")
+    pdf.drawString(110 * mm, y + 2.5 * mm, "Qty")
+    pdf.drawString(130 * mm, y + 2.5 * mm, "Unit Price")
+    pdf.drawRightString(width - 22 * mm, y + 2.5 * mm, "Amount")
+
+    y -= 8 * mm
+    pdf.setFont("Helvetica", 10)
+    for line in order.lines.all():
+        name = line.product.name if line.product else "Product"
+        pdf.drawString(22 * mm, y + 2 * mm, name)
+        pdf.drawString(110 * mm, y + 2 * mm, str(line.quantity))
+        pdf.drawString(130 * mm, y + 2 * mm, str(line.unit_price))
+        pdf.drawRightString(width - 22 * mm, y + 2 * mm, str(line.amount))
+        y -= 7 * mm
+
+    y -= 4 * mm
+    pdf.setFont("Helvetica", 10)
+    for label, value in (
+        ("Untaxed Amount", invoice.untaxed_amount),
+        ("Tax (10%)", invoice.tax_amount),
+        ("Security Deposit", order.security_deposit_held),
+    ):
+        pdf.drawRightString(150 * mm, y, f"{label}:")
+        pdf.drawRightString(width - 22 * mm, y, str(value))
+        y -= 6 * mm
+
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawRightString(150 * mm, y, "Total:")
+    pdf.drawRightString(width - 22 * mm, y, str(invoice.total_amount))
+
+    pdf.setFont("Helvetica-Oblique", 8)
+    pdf.setFillColor(colors.grey)
+    pdf.drawCentredString(width / 2, 15 * mm, "Thank you for renting with RentEase")
+
+    pdf.showPage()
+    pdf.save()
+    buffer.seek(0)
+    return buffer

@@ -18,6 +18,7 @@ export default function ShopLayout({ children }) {
   const navLinks = [
     { href: '/shop', label: 'Products' },
     { href: '/orders', label: 'My Orders' },
+    { href: '/profile', label: 'Profile' },
   ]
 
   return (
