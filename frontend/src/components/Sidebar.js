@@ -15,7 +15,7 @@ const NAV = [
     ),
   },
   {
-    href: '/orders',
+    href: '/pickup-return',
     label: 'Orders',
     icon: (
       <svg className={i} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
@@ -35,6 +35,7 @@ const NAV = [
   {
     href: '/pickup-return',
     label: 'Pickup / Return',
+    hidden: true,
     icon: (
       <svg className={i} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h5M20 20v-5h-5M20 9A8 8 0 006 5.3M4 15a8 8 0 0014 3.7" />
@@ -77,7 +78,7 @@ export default function Sidebar({ open, onClose }) {
         </div>
 
         <nav className="mt-4 flex flex-1 flex-col gap-1 overflow-y-auto px-3">
-          {NAV.map((item) => {
+          {NAV.filter(item => !item.hidden).map((item) => {
             const active =
               pathname === item.href || pathname.startsWith(item.href + '/')
             return (
