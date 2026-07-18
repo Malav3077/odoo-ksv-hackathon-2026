@@ -12,6 +12,35 @@ from .models import RentalOrder, RentalOrderLine
 TAX_RATE = Decimal("0.10")
 
 
+def _check_stock(lines):
+    """Raise ValueError if any product has insufficient stock."""
+    for item in lines:
+        product = item["product"]
+        qty = item["quantity"]
+        if product.quantity_on_hand < qty:
+            raise ValueError(
+                f"Insufficient stock for '{product.name}': "
+                f"requested {qty}, available {product.quantity_on_hand}."
+            )
+
+
+def _decrement_stock(lines):
+    for item in lines:
+        product = item["product"]
+        qty = item["quantity"]
+        Product.objects.filter(pk=product.pk).update(
+            quantity_on_hand=product.quantity_on_hand - qty
+        )
+
+
+def _restore_stock(order):
+    for line in order.lines.select_related("product"):
+        if line.product and line.product.name != "Late Fees":
+            Product.objects.filter(pk=line.product_id).update(
+                quantity_on_hand=line.product.quantity_on_hand + line.quantity
+            )
+
+
 def _generate_reference(order):
     if not order.order_reference:
         order.order_reference = f"SO{order.id:04d}"
@@ -30,6 +59,9 @@ def _recalculate_totals(order):
 def create_order(*, customer, lines, pickup_date, return_date,
                  delivery_method="store_pickup", invoice_address=None,
                  delivery_address=None, pricelist=None, created_by=None, confirm=False):
+    if confirm:
+        _check_stock(lines)
+
     order = RentalOrder.objects.create(
         customer=customer,
         status="reserved" if confirm else "quotation",
@@ -65,6 +97,7 @@ def create_order(*, customer, lines, pickup_date, return_date,
     _recalculate_totals(order)
     if confirm:
         order.invoice_status = "invoiced"
+        _decrement_stock(lines)
     order.save()
     ActivityLog.objects.create(
         user=created_by or customer, action=f"Created order {order.order_reference}"
@@ -90,6 +123,9 @@ def send_quotation(order, user):
 def confirm_order(order, user):
     if order.status not in ("quotation", "quotation_sent"):
         raise ValueError("Only a quotation can be confirmed.")
+    lines = [{"product": l.product, "quantity": l.quantity} for l in order.lines.select_related("product")]
+    _check_stock(lines)
+    _decrement_stock(lines)
     order.invoice_status = "invoiced"
     order.save(update_fields=["invoice_status"])
     return _transition(order, "reserved", "Confirmed order", user)
@@ -98,6 +134,8 @@ def confirm_order(order, user):
 def cancel_order(order, user):
     if order.status in ("returned", "late_return", "cancelled"):
         raise ValueError("This order can no longer be cancelled.")
+    if order.status in ("reserved", "picked_up", "late_pickup"):
+        _restore_stock(order)
     return _transition(order, "cancelled", "Cancelled order", user)
 
 
@@ -159,6 +197,7 @@ def settle_return(order, user, when=None):
     order.late_fee_charged = late_fee
     order.deposit_refunded = deposit - late_fee
     order.save(update_fields=["actual_return_date", "late_fee_charged", "deposit_refunded"])
+    _restore_stock(order)
     ActivityLog.objects.create(
         user=user,
         action=(

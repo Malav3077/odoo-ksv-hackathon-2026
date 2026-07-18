@@ -35,16 +35,19 @@ class CheckoutView(APIView):
         serializer = CheckoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        order = services.create_order(
-            customer=request.user,
-            lines=_line_payload(data["lines"]),
-            pickup_date=data["pickup_date"],
-            return_date=data["return_date"],
-            delivery_method=data["delivery_method"],
-            invoice_address=data.get("invoice_address"),
-            delivery_address=data.get("delivery_address"),
-            confirm=True,
-        )
+        try:
+            order = services.create_order(
+                customer=request.user,
+                lines=_line_payload(data["lines"]),
+                pickup_date=data["pickup_date"],
+                return_date=data["return_date"],
+                delivery_method=data["delivery_method"],
+                invoice_address=data.get("invoice_address"),
+                delivery_address=data.get("delivery_address"),
+                confirm=True,
+            )
+        except ValueError as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
         invoice = billing_services.generate_invoice(order)
         billing_services.record_payments(order)
         return Response(
