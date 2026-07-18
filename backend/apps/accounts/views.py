@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.common.models import ActivityLog
+from apps.common.permissions import IsCustomer
 
 from .models import CustomerAddress, User
 from .serializers import (
@@ -36,6 +37,15 @@ class RegisterView(generics.CreateAPIView):
 class VendorRegisterView(RegisterView):
     serializer_class = VendorRegisterSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        ActivityLog.objects.create(user=user, action=f"Registered as {user.role}")
+        data = UserSerializer(user).data
+        data["company_name"] = user.vendor_profile.company_name
+        return Response(data, status=status.HTTP_201_CREATED)
+
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -48,7 +58,7 @@ class LoginView(APIView):
         user = User.objects.filter(email__iexact=email).first()
         if user is None or not user.check_password(password):
             return Response(
-                {"detail": "Invalid email or password."},
+                {"detail": "Invalid credentials"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         if not user.is_active:
@@ -85,23 +95,29 @@ class PasswordResetView(APIView):
                 f"[PASSWORD RESET] Link for {email}: "
                 f"http://localhost:3000/reset-password/confirm?token=DEMO-TOKEN"
             )
-        return Response({"detail": "Password reset link sent to your email."})
+        return Response({"message": "Password reset link sent to your email"})
 
 
 class AddressListCreateView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsCustomer]
     serializer_class = CustomerAddressSerializer
+    pagination_class = None
 
     def get_queryset(self):
         return CustomerAddress.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        ActivityLog.objects.create(user=self.request.user, action="Added a delivery address")
 
 
 class AddressDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsCustomer]
     serializer_class = CustomerAddressSerializer
 
     def get_queryset(self):
         return CustomerAddress.objects.filter(user=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save()
+        ActivityLog.objects.create(user=self.request.user, action="Updated a delivery address")
