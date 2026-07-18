@@ -164,3 +164,88 @@
 *::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* ============================================================= */
+/*  Dashboard accent palette + motion                            */
+/*  Curated, accessible hues that read well in light & dark.     */
+/* ============================================================= */
+:root {
+  --dash-indigo: oklch(0.55 0.22 264);
+  --dash-emerald: oklch(0.6 0.16 162);
+  --dash-amber: oklch(0.72 0.17 66);
+  --dash-rose: oklch(0.62 0.22 18);
+  --dash-sky: oklch(0.66 0.15 232);
+  --dash-violet: oklch(0.57 0.24 300);
+  --dash-teal: oklch(0.62 0.12 195);
+  --dash-grid: oklch(0.922 0 0);
+}
+
+.dark {
+  --dash-indigo: oklch(0.68 0.19 264);
+  --dash-emerald: oklch(0.74 0.16 162);
+  --dash-amber: oklch(0.8 0.16 74);
+  --dash-rose: oklch(0.71 0.19 18);
+  --dash-sky: oklch(0.75 0.14 232);
+  --dash-violet: oklch(0.72 0.2 300);
+  --dash-teal: oklch(0.74 0.12 195);
+  --dash-grid: oklch(1 0 0 / 8%);
+}
+
+@theme inline {
+  --color-dash-indigo: var(--dash-indigo);
+  --color-dash-emerald: var(--dash-emerald);
+  --color-dash-amber: var(--dash-amber);
+  --color-dash-rose: var(--dash-rose);
+  --color-dash-sky: var(--dash-sky);
+  --color-dash-violet: var(--dash-violet);
+  --color-dash-teal: var(--dash-teal);
+}
+
+/* Entrance: fade + rise, used with staggered animation-delay */
+@keyframes dash-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Chart bars growing from the baseline */
+@keyframes dash-bar-grow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* SVG line/area drawing itself */
+@keyframes dash-draw {
+  from { stroke-dashoffset: var(--dash-len, 1000); }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* Donut ring sweeping in */
+@keyframes dash-sweep {
+  from { stroke-dashoffset: var(--circ, 1000); }
+  to   { stroke-dashoffset: var(--target, 0); }
+}
+
+/* Soft pulsing dot (live indicator) */
+@keyframes dash-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+@layer utilities {
+  .animate-dash-rise {
+    opacity: 0;
+    animation: dash-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .animate-dash-pulse {
+    animation: dash-pulse 2s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-dash-rise,
+  .animate-dash-pulse,
+  [class*="animate-dash"] {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}

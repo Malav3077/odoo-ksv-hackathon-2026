@@ -1,5 +1,6 @@
 # ===== Backend (Django) =====
 backend/venv/
+backend/.venv/
 __pycache__/
 *.pyc
 backend/db.sqlite3

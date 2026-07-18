@@ -49,13 +49,16 @@ function DropdownMenuGroup({ ...props }) {
   return <MenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />
 }
 
+// Base UI only exposes a group-bound `Menu.GroupLabel` (which throws outside a
+// `Menu.Group`). shadcn's `DropdownMenuLabel` is a standalone, non-interactive
+// label, so render a plain div — matching the old Radix `Label` behavior.
 function DropdownMenuLabel({
   className,
   inset,
   ...props
 }) {
   return (
-    <MenuPrimitive.GroupLabel
+    <div
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
