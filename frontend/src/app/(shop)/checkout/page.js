@@ -302,7 +302,7 @@ export default function CheckoutPage() {
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-700 mb-4 flex gap-2">
                 <span>ℹ️</span>
-                <span>This is a demo — no real payment is processed. Click "Pay Now" to simulate a successful payment.</span>
+                <span>This is a demo — no real payment is processed. Click &quot;Pay Now&quot; to simulate a successful payment.</span>
               </div>
 
               <div className="flex gap-3">
