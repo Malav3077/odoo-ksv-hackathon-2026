@@ -3,149 +3,143 @@
 @tailwind utilities;
 
 body {
-  background: #f9fafb;
-  color: #111827;
+  background: #f8fafc;
+  color: #0f172a;
 }
 
-/* ── KEYFRAME ANIMATIONS ── */
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(20px); }
+/* ── KEYFRAMES ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33%       { transform: translateY(-12px) rotate(2deg); }
-  66%       { transform: translateY(-6px) rotate(-1deg); }
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
-
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-18px); }
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
 }
-
-@keyframes blob {
-  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  50%       { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
 }
-
-@keyframes shimmer {
+@keyframes shimmerMove {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.92); }
-  to   { opacity: 1; transform: scale(1); }
-}
+/* ── ANIMATION CLASSES ── */
+.anim-fade-up    { animation: fadeUp 0.5s cubic-bezier(.22,1,.36,1) both; }
+.anim-fade-in    { animation: fadeIn 0.4s ease both; }
+.anim-slide-left { animation: slideInLeft 0.45s cubic-bezier(.22,1,.36,1) both; }
+.anim-scale-up   { animation: scaleUp 0.35s cubic-bezier(.22,1,.36,1) both; }
+.anim-float      { animation: floatY 3s ease-in-out infinite; }
 
-@keyframes slideRight {
-  from { opacity: 0; transform: translateX(-16px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
+.d-1 { animation-delay: 0.08s; }
+.d-2 { animation-delay: 0.16s; }
+.d-3 { animation-delay: 0.24s; }
+.d-4 { animation-delay: 0.32s; }
+.d-5 { animation-delay: 0.40s; }
+.d-6 { animation-delay: 0.48s; }
 
-@keyframes pulse-ring {
-  0%   { transform: scale(0.8); opacity: 0.8; }
-  100% { transform: scale(1.6); opacity: 0; }
-}
-
-/* ── UTILITY CLASSES ── */
-.animate-fade-slide-up  { animation: fadeSlideUp 0.5s ease both; }
-.animate-fade-in        { animation: fadeIn 0.4s ease both; }
-.animate-scale-in       { animation: scaleIn 0.4s ease both; }
-.animate-float          { animation: float 4s ease-in-out infinite; }
-.animate-float-slow     { animation: floatSlow 6s ease-in-out infinite; }
-.animate-blob           { animation: blob 8s ease-in-out infinite; }
-.animate-slide-right    { animation: slideRight 0.4s ease both; }
-
-/* stagger delays */
-.delay-100 { animation-delay: 0.1s; }
-.delay-150 { animation-delay: 0.15s; }
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-400 { animation-delay: 0.4s; }
-.delay-500 { animation-delay: 0.5s; }
-.delay-600 { animation-delay: 0.6s; }
-.delay-700 { animation-delay: 0.7s; }
-
-/* ── INPUT GLOW ── */
-.input-purple {
+/* ── PROFESSIONAL INPUT ── */
+.pro-input {
   width: 100%;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 10px 16px;
-  font-size: 14px;
-  color: #111827;
   background: #fff;
-  transition: all 0.2s ease;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 14px;
+  color: #0f172a;
+  transition: border-color .2s, box-shadow .2s, background .2s;
   outline: none;
 }
-.input-purple::placeholder { color: #9ca3af; }
-.input-purple:focus {
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
-  background: #faf5ff;
+.pro-input::placeholder { color: #94a3b8; }
+.pro-input:hover  { border-color: #c7d2fe; }
+.pro-input:focus  {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+  background: #fafafe;
 }
-.input-purple.error {
+.pro-input.err {
   border-color: #f87171;
-  background: #fff5f5;
+  box-shadow: 0 0 0 3px rgba(248,113,113,.1);
+  background: #fff8f8;
 }
 
-/* ── BUTTON GLOW ── */
-.btn-purple {
+/* ── PROFESSIONAL BUTTON ── */
+.pro-btn {
   width: 100%;
-  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
-  color: white;
+  background: #4f46e5;
+  color: #fff;
   font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 12px;
+  font-size: 14px;
+  padding: 11px 20px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(109,40,217,0.35);
-  position: relative;
-  overflow: hidden;
+  transition: background .2s, transform .15s, box-shadow .2s;
+  box-shadow: 0 2px 8px rgba(79,70,229,.28), 0 1px 2px rgba(79,70,229,.2);
+  letter-spacing: .01em;
 }
-.btn-purple:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(109,40,217,0.45);
+.pro-btn:hover:not(:disabled) {
+  background: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79,70,229,.35), 0 2px 4px rgba(79,70,229,.2);
 }
-.btn-purple:active:not(:disabled) {
+.pro-btn:active:not(:disabled) {
+  background: #3730a3;
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(109,40,217,0.3);
+  box-shadow: 0 2px 6px rgba(79,70,229,.22);
 }
-.btn-purple:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.pro-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* ── LEFT PANEL ── */
+.pro-left {
+  background: linear-gradient(140deg, #1e1b4b 0%, #312e81 40%, #4338ca 75%, #6366f1 100%);
 }
 
-/* shimmer on btn-purple */
-.btn-purple::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 60%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.5s ease;
-}
-.btn-purple:hover::after { left: 140%; }
-
-/* ── CARD ── */
-.auth-card {
-  background: white;
-  border-radius: 24px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+/* ── FORM CARD ── */
+.pro-card {
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 20px;
   padding: 36px 32px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 32px rgba(0,0,0,.07);
 }
 
-/* ── LEFT PANEL GRADIENT ── */
-.left-panel {
-  background: linear-gradient(145deg, #1e0a3c 0%, #3b0764 30%, #581c87 65%, #6b21a8 100%);
+/* ── DIVIDER ── */
+.pro-divider {
+  display: flex; align-items: center; gap: 12px;
+  color: #94a3b8; font-size: 12px; font-weight: 500;
+}
+.pro-divider::before, .pro-divider::after {
+  content: ''; flex: 1; height: 1px; background: #f1f5f9;
+}
+
+/* ── SECONDARY BUTTON ── */
+.pro-btn-outline {
+  width: 100%;
+  background: transparent;
+  border: 1.5px solid #e2e8f0;
+  color: #475569;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, color .2s;
+  text-align: center;
+  display: block;
+  text-decoration: none;
+}
+.pro-btn-outline:hover {
+  border-color: #a5b4fc;
+  color: #4f46e5;
+  background: #f5f3ff;
 }

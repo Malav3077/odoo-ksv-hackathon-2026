@@ -20,205 +20,177 @@ export default function LoginPage() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!form.email || !form.password) {
-      setError('Please enter both email and password.')
-      return
-    }
+    if (!form.email || !form.password) { setError('Please enter email and password.'); return }
     setLoading(true)
     try {
       const res = await api.post('/auth/login/', { email: form.email, password: form.password })
       login(res.data.user, res.data.access, res.data.refresh)
       router.push('/shop')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Login failed. Please try again.')
+      setError(err.response?.data?.detail || 'Invalid email or password.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-slate-50">
 
       {/* ── LEFT PANEL ── */}
-      <div className="left-panel hidden lg:flex lg:w-1/2 flex-col justify-between p-12 relative overflow-hidden">
+      <div className="pro-left hidden lg:flex lg:w-[52%] flex-col justify-between p-14 relative overflow-hidden">
 
-        {/* animated blobs */}
-        <div className="absolute top-[-60px] left-[-60px] w-80 h-80 bg-purple-500 opacity-10 rounded-full animate-blob" />
-        <div className="absolute bottom-[-40px] right-[-40px] w-96 h-96 bg-violet-400 opacity-10 rounded-full animate-blob delay-400" />
-        <div className="absolute top-1/2 left-1/3 w-40 h-40 bg-purple-300 opacity-5 rounded-full animate-float-slow" />
+        {/* subtle dot grid overlay */}
+        <div className="absolute inset-0 opacity-[0.07]" style={{
+          backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)',
+          backgroundSize: '28px 28px'
+        }} />
 
-        {/* floating cards */}
-        <div className="absolute right-10 top-1/4 animate-float delay-200">
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-3 flex items-center gap-2.5 shadow-lg">
-            <div className="w-8 h-8 bg-green-400 rounded-lg flex items-center justify-center text-sm">✅</div>
-            <div>
-              <p className="text-white text-xs font-semibold">Order Confirmed</p>
-              <p className="text-purple-200 text-xs">Camera lens — 3 days</p>
-            </div>
-          </div>
-        </div>
-        <div className="absolute right-16 top-1/2 animate-float-slow delay-300">
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-3 flex items-center gap-2.5 shadow-lg">
-            <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center text-sm">💰</div>
-            <div>
-              <p className="text-white text-xs font-semibold">Deposit Refunded</p>
-              <p className="text-purple-200 text-xs">₹2,000 returned</p>
-            </div>
-          </div>
-        </div>
+        {/* glow blobs */}
+        <div className="absolute top-[-80px] right-[-80px] w-72 h-72 rounded-full bg-indigo-400 opacity-20 blur-3xl" />
+        <div className="absolute bottom-[-60px] left-[-40px] w-64 h-64 rounded-full bg-violet-500 opacity-20 blur-3xl" />
 
-        {/* logo */}
-        <div className="relative z-10 animate-slide-right">
+        {/* Logo */}
+        <div className="relative z-10 anim-slide-left">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-purple-700 font-black text-lg">R</span>
+            <div className="w-9 h-9 bg-white/15 backdrop-blur-sm border border-white/25 rounded-xl flex items-center justify-center">
+              <span className="text-white font-black text-base">R</span>
             </div>
-            <span className="text-white text-2xl font-bold tracking-tight">RentEase</span>
+            <span className="text-white text-xl font-bold tracking-tight">RentEase</span>
           </div>
         </div>
 
-        {/* center content */}
-        <div className="relative z-10 animate-fade-slide-up delay-200">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-3 py-1 mb-5">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-white text-xs font-medium">500+ products available</span>
+        {/* Center content */}
+        <div className="relative z-10">
+          <div className="anim-fade-up">
+            <p className="text-indigo-300 text-sm font-semibold uppercase tracking-widest mb-4">Rental Management</p>
+            <h2 className="text-4xl font-bold text-white leading-[1.2] mb-5">
+              The smarter way<br />to rent anything.
+            </h2>
+            <p className="text-indigo-200 text-[15px] leading-relaxed mb-10 max-w-sm">
+              Browse, book, and manage your entire rental lifecycle from one clean dashboard.
+            </p>
           </div>
-          <h2 className="text-4xl font-bold text-white leading-tight mb-4">
-            Rent smarter,<br />
-            <span className="text-purple-300">not harder.</span>
-          </h2>
-          <p className="text-purple-200 text-sm leading-relaxed mb-8">
-            Manage your entire rental lifecycle — from browsing to return — in one place.
-          </p>
+
+          {/* Feature list */}
           <div className="space-y-3">
             {[
-              { icon: '📦', text: 'Browse hundreds of rental products' },
-              { icon: '📅', text: 'Choose your rental period instantly' },
-              { icon: '🔒', text: 'Secure deposits & auto late-fee settlement' },
-              { icon: '📄', text: 'Download invoice after every order' },
-            ].map((item, i) => (
-              <div key={item.text} className={`flex items-center gap-3 animate-slide-right delay-${300 + i * 100}`}>
-                <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-sm flex-shrink-0">
-                  {item.icon}
+              { icon: '📦', title: 'Huge catalog', desc: 'Electronics, furniture, vehicles & more' },
+              { icon: '🔒', title: 'Secure deposits', desc: 'Auto refund on timely return' },
+              { icon: '📄', title: 'Instant invoices', desc: 'PDF download after every order' },
+              { icon: '🔄', title: 'Easy returns', desc: 'Track status at every step' },
+            ].map((f, i) => (
+              <div key={f.title} className={`flex items-center gap-3.5 anim-fade-up d-${i + 2}`}>
+                <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-base flex-shrink-0">
+                  {f.icon}
                 </div>
-                <span className="text-purple-100 text-sm">{item.text}</span>
+                <div>
+                  <p className="text-white text-sm font-semibold leading-none mb-0.5">{f.title}</p>
+                  <p className="text-indigo-300 text-xs">{f.desc}</p>
+                </div>
               </div>
             ))}
+          </div>
+
+          {/* Floating stats card */}
+          <div className="mt-10 anim-float">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-4 w-fit">
+              <div className="w-10 h-10 bg-green-400/20 rounded-xl flex items-center justify-center">
+                <span className="text-green-300 font-bold text-sm">↑</span>
+              </div>
+              <div>
+                <p className="text-white text-sm font-semibold">500+ active rentals</p>
+                <p className="text-indigo-300 text-xs">across all categories today</p>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="relative z-10">
-          <p className="text-purple-400 text-xs">© 2026 RentEase · Odoo x KSV Hackathon</p>
+          <p className="text-indigo-400 text-xs">© 2026 RentEase · Odoo × KSV Hackathon</p>
         </div>
       </div>
 
       {/* ── RIGHT PANEL ── */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-br from-slate-50 via-purple-50/30 to-white px-6 py-12">
-        <div className="w-full max-w-md animate-fade-slide-up">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-white">
+        <div className="w-full max-w-[400px]">
 
-          {/* mobile logo */}
-          <div className="flex items-center gap-2 mb-8 lg:hidden">
-            <div className="w-8 h-8 bg-purple-700 rounded-lg flex items-center justify-center">
+          {/* Mobile logo */}
+          <div className="flex items-center gap-2.5 mb-8 lg:hidden">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-black text-sm">R</span>
             </div>
-            <span className="text-purple-900 text-xl font-bold">RentEase</span>
+            <span className="text-slate-800 text-lg font-bold">RentEase</span>
           </div>
 
-          <div className="auth-card">
-            <div className="mb-7">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">Welcome back 👋</h1>
-              <p className="text-gray-500 text-sm">Sign in to continue to your account</p>
+          <div className="anim-fade-up">
+            <h1 className="text-[26px] font-bold text-slate-900 mb-1">Sign in</h1>
+            <p className="text-slate-500 text-sm mb-8">Welcome back — enter your credentials to continue.</p>
+          </div>
+
+          {error && (
+            <div className="mb-5 flex items-center gap-2.5 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm anim-scale-up">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="anim-fade-up d-1">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email address</label>
+              <input type="email" name="email" value={form.email} onChange={handleChange}
+                placeholder="you@example.com" className="pro-input" />
             </div>
 
-            {error && (
-              <div className="mb-5 flex items-center gap-2.5 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm animate-scale-in">
-                <span className="text-base">⚠️</span>
-                <span>{error}</span>
+            <div className="anim-fade-up d-2">
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-sm font-semibold text-slate-700">Password</label>
+                <Link href="/reset-password" className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+                  Forgot password?
+                </Link>
               </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="animate-fade-slide-up delay-100">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="you@example.com"
-                  className="input-purple"
-                />
+              <div className="relative">
+                <input type={showPassword ? 'text' : 'password'} name="password" value={form.password}
+                  onChange={handleChange} placeholder="Enter your password"
+                  className="pro-input" style={{ paddingRight: '44px' }} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-500 transition-colors text-sm">
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
               </div>
+            </div>
 
-              <div className="animate-fade-slide-up delay-200">
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-sm font-medium text-gray-700">Password</label>
-                  <Link href="/reset-password" className="text-xs text-purple-600 hover:text-purple-800 font-medium transition-colors">
-                    Forgot password?
-                  </Link>
-                </div>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
-                    placeholder="Enter your password"
-                    className="input-purple"
-                    style={{ paddingRight: '48px' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-600 transition-colors text-sm w-6 h-6 flex items-center justify-center"
-                  >
-                    {showPassword ? '🙈' : '👁️'}
-                  </button>
-                </div>
-              </div>
-
-              <div className="pt-1 animate-fade-slide-up delay-300">
-                <button type="submit" disabled={loading} className="btn-purple">
-                  {loading ? (
-                    <span className="flex items-center justify-center gap-2">
+            <div className="anim-fade-up d-3 pt-1">
+              <button type="submit" disabled={loading} className="pro-btn">
+                {loading
+                  ? <span className="flex items-center justify-center gap-2">
                       <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                       </svg>
                       Signing in...
                     </span>
-                  ) : 'Sign In →'}
-                </button>
-              </div>
-            </form>
-
-            <div className="my-5 flex items-center gap-3">
-              <div className="flex-1 h-px bg-gray-100" />
-              <span className="text-xs text-gray-400 font-medium">or</span>
-              <div className="flex-1 h-px bg-gray-100" />
+                  : 'Sign in'}
+              </button>
             </div>
+          </form>
 
-            <div className="space-y-2.5 animate-fade-slide-up delay-400">
-              <Link
-                href="/signup"
-                className="w-full flex items-center justify-center gap-2 border-2 border-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl hover:border-purple-300 hover:text-purple-700 hover:bg-purple-50/50 transition-all duration-200 text-sm"
-              >
-                👤 Create a customer account
-              </Link>
-              <Link
-                href="/vendor-signup"
-                className="w-full flex items-center justify-center gap-2 border-2 border-purple-200 text-purple-700 font-semibold py-2.5 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 text-sm"
-              >
-                🏪 Register as a Vendor
-              </Link>
-            </div>
+          <div className="my-6 pro-divider anim-fade-up d-4">or</div>
+
+          <div className="space-y-2.5 anim-fade-up d-5">
+            <Link href="/signup" className="pro-btn-outline">Create a customer account</Link>
+            <Link href="/vendor-signup" className="pro-btn-outline" style={{ borderColor: '#c7d2fe', color: '#4f46e5' }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.borderColor = '#818cf8' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = '#c7d2fe' }}>
+              Register as a Vendor
+            </Link>
           </div>
 
-          <p className="text-center text-xs text-gray-400 mt-5">
-            By signing in you agree to our{' '}
-            <span className="text-purple-600 cursor-pointer hover:underline">Terms</span>
-            {' '}&{' '}
-            <span className="text-purple-600 cursor-pointer hover:underline">Privacy Policy</span>
+          <p className="text-center text-xs text-slate-400 mt-8 anim-fade-up d-6">
+            By continuing you agree to our{' '}
+            <span className="text-indigo-500 hover:underline cursor-pointer">Terms</span> &{' '}
+            <span className="text-indigo-500 hover:underline cursor-pointer">Privacy Policy</span>
           </p>
         </div>
       </div>
