@@ -87,9 +87,9 @@ export default function VendorSignupPage() {
       <div className="odoo-left hidden lg:flex lg:w-[52%] flex-col justify-between p-14 overflow-hidden">
 
         <div className="absolute top-[-120px] right-[-120px] w-[380px] h-[380px] rounded-full opacity-20 blur-[80px]"
-          style={{ background: '#9c27b0', animation: 'glowPulse 7s ease-in-out infinite' }} />
+          style={{ background: '#4f46e5', animation: 'glowPulse 7s ease-in-out infinite' }} />
         <div className="absolute bottom-[-100px] left-[-80px] w-[320px] h-[320px] rounded-full opacity-25 blur-[70px]"
-          style={{ background: '#6a1b9a', animation: 'glowPulse 10s ease-in-out infinite 2s' }} />
+          style={{ background: '#3730a3', animation: 'glowPulse 10s ease-in-out infinite 2s' }} />
         <div className="absolute top-1/2 right-[-60px] -translate-y-1/2 w-[280px] h-[280px] rounded-full border border-white/[0.06]"
           style={{ animation: 'spinSlow 35s linear infinite' }} />
 
@@ -105,16 +105,16 @@ export default function VendorSignupPage() {
         <div className="relative z-10">
           <div className="au">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3.5 py-1.5 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#ce93d8' }} />
-              <span className="text-purple-200 text-xs font-semibold tracking-wide">For Vendors</span>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#818cf8' }} />
+              <span className="text-indigo-200 text-xs font-semibold tracking-wide">For Vendors</span>
             </div>
             <h2 className="text-[40px] font-bold text-white leading-[1.15] mb-5 tracking-tight">
               Grow your rental<br />
-              <span style={{ background: 'linear-gradient(90deg, #f48fb1, #ce93d8, #ab47bc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              <span style={{ background: 'linear-gradient(90deg, #a5b4fc, #818cf8, #6366f1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 business here.
               </span>
             </h2>
-            <p className="text-purple-200/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
+            <p className="text-indigo-200/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
               List products, process orders, manage pickups & returns — all from your vendor dashboard.
             </p>
           </div>
@@ -130,7 +130,7 @@ export default function VendorSignupPage() {
                 <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-base flex-shrink-0">{f.icon}</div>
                 <div>
                   <p className="text-white text-sm font-semibold leading-none mb-0.5">{f.title}</p>
-                  <p className="text-purple-300 text-xs">{f.desc}</p>
+                  <p className="text-indigo-300 text-xs">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -138,7 +138,7 @@ export default function VendorSignupPage() {
 
           <div className="mt-10 au d3">
             <div className="glass-card af w-fit">
-              <p className="text-purple-300 text-[10px] font-semibold uppercase tracking-wider mb-1">Avg. vendor this month</p>
+              <p className="text-indigo-300 text-[10px] font-semibold uppercase tracking-wider mb-1">Avg. vendor this month</p>
               <p className="text-white text-2xl font-bold">₹48,200</p>
               <p className="text-emerald-300 text-xs mt-0.5">↑ 23% vs last month</p>
             </div>
@@ -155,7 +155,7 @@ export default function VendorSignupPage() {
         <div className="w-full max-w-[420px]">
 
           <div className="flex items-center gap-2.5 mb-6 lg:hidden">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#7b1fa2' }}>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#4f46e5' }}>
               <span className="text-white font-black text-sm">R</span>
             </div>
             <span className="text-gray-900 text-lg font-bold">RentEase</span>
@@ -163,13 +163,13 @@ export default function VendorSignupPage() {
 
           <div className="odoo-card au">
             <div className="mb-6">
-              <div className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-3" style={{ background: '#f3e5f5', border: '1px solid #ce93d8', color: '#7b1fa2' }}>
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-3" style={{ background: '#eef2ff', border: '1px solid #818cf8', color: '#4f46e5' }}>
                 🏪 Vendor Registration
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-1.5">Register as Vendor</h1>
               <p className="text-gray-500 text-sm">
                 Already have an account?{' '}
-                <Link href="/login" className="font-semibold transition-colors" style={{ color: '#7b1fa2' }}>Sign in</Link>
+                <Link href="/login" className="font-semibold transition-colors" style={{ color: '#4f46e5' }}>Sign in</Link>
               </p>
             </div>
 
@@ -220,8 +220,8 @@ export default function VendorSignupPage() {
               </div>
 
               {/* Business section */}
-              <div className="au d3 rounded-xl border border-purple-100 bg-purple-50/50 p-4 space-y-3">
-                <p className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: '#7b1fa2' }}>
+              <div className="au d3 rounded-xl border border-indigo-100 bg-indigo-50/50 p-4 space-y-3">
+                <p className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: '#4f46e5' }}>
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                   </svg>
@@ -251,7 +251,7 @@ export default function VendorSignupPage() {
                 </div>
                 {err('password') && <p className="text-red-500 text-xs mt-1">{err('password')}</p>}
                 {form.password.length > 0 && (
-                  <div className="mt-2.5 grid grid-cols-2 gap-1.5 p-3 bg-purple-50 border border-purple-100 rounded-xl as">
+                  <div className="mt-2.5 grid grid-cols-2 gap-1.5 p-3 bg-indigo-50 border border-indigo-100 rounded-xl as">
                     <Rule met={rules.length} text="6–12 characters" />
                     <Rule met={rules.upper} text="One uppercase" />
                     <Rule met={rules.lower} text="One lowercase" />
@@ -288,7 +288,7 @@ export default function VendorSignupPage() {
 
             <p className="text-center text-xs text-gray-400 mt-5">
               Want to rent instead?{' '}
-              <Link href="/signup" className="font-semibold hover:underline" style={{ color: '#7b1fa2' }}>Customer signup</Link>
+              <Link href="/signup" className="font-semibold hover:underline" style={{ color: '#4f46e5' }}>Customer signup</Link>
             </p>
           </div>
         </div>

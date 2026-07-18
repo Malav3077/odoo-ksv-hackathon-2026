@@ -46,9 +46,9 @@ export default function LoginPage() {
 
         {/* Glow orbs */}
         <div className="absolute top-[-120px] right-[-120px] w-[400px] h-[400px] rounded-full opacity-20 blur-[80px]"
-          style={{ background: '#9c27b0', animation: 'glowPulse 6s ease-in-out infinite' }} />
+          style={{ background: '#4f46e5', animation: 'glowPulse 6s ease-in-out infinite' }} />
         <div className="absolute bottom-[-100px] left-[-80px] w-[350px] h-[350px] rounded-full opacity-25 blur-[70px]"
-          style={{ background: '#6a1b9a', animation: 'glowPulse 8s ease-in-out infinite 2s' }} />
+          style={{ background: '#3730a3', animation: 'glowPulse 8s ease-in-out infinite 2s' }} />
 
         {/* Rotating ring decoration */}
         <div className="absolute top-1/2 right-[-60px] -translate-y-1/2 w-[280px] h-[280px] rounded-full border border-white/[0.06]"
@@ -70,16 +70,16 @@ export default function LoginPage() {
         <div className="relative z-10">
           <div className="au">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3.5 py-1.5 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#ce93d8' }} />
-              <span className="text-purple-200 text-xs font-semibold tracking-wide">Odoo × KSV Hackathon 2026</span>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#818cf8' }} />
+              <span className="text-indigo-200 text-xs font-semibold tracking-wide">Odoo × KSV Hackathon 2026</span>
             </div>
             <h2 className="text-[42px] font-bold text-white leading-[1.15] mb-5 tracking-tight">
               The smarter way<br />
-              <span style={{ background: 'linear-gradient(90deg, #f48fb1, #ce93d8, #ab47bc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              <span style={{ background: 'linear-gradient(90deg, #a5b4fc, #818cf8, #6366f1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 to rent anything.
               </span>
             </h2>
-            <p className="text-purple-200/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
+            <p className="text-indigo-200/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
               A complete rental management platform — from browse to return, automated.
             </p>
           </div>
@@ -87,7 +87,7 @@ export default function LoginPage() {
           {/* Feature pills */}
           <div className="flex flex-wrap gap-2 mb-10 au d2">
             {['📦 Product Catalog', '🔒 Secure Deposits', '📄 Auto Invoices', '🔄 Easy Returns'].map(f => (
-              <span key={f} className="text-xs text-purple-200 bg-white/8 border border-white/10 rounded-full px-3.5 py-1.5 font-medium">
+              <span key={f} className="text-xs text-indigo-200 bg-white/8 border border-white/10 rounded-full px-3.5 py-1.5 font-medium">
                 {f}
               </span>
             ))}
@@ -96,16 +96,16 @@ export default function LoginPage() {
           {/* Floating glass cards */}
           <div className="flex gap-3 au d3">
             <div className="glass-card af">
-              <p className="text-purple-300 text-[10px] font-semibold uppercase tracking-wider mb-1">Active Rentals</p>
+              <p className="text-indigo-300 text-[10px] font-semibold uppercase tracking-wider mb-1">Active Rentals</p>
               <p className="text-white text-2xl font-bold">1,240</p>
               <p className="text-emerald-300 text-xs mt-0.5 flex items-center gap-1">
                 <span>↑</span> 18% this week
               </p>
             </div>
             <div className="glass-card af2">
-              <p className="text-purple-300 text-[10px] font-semibold uppercase tracking-wider mb-1">Deposits Safe</p>
+              <p className="text-indigo-300 text-[10px] font-semibold uppercase tracking-wider mb-1">Deposits Safe</p>
               <p className="text-white text-2xl font-bold">₹8.4L</p>
-              <p className="text-purple-300 text-xs mt-0.5">auto-refunded on return</p>
+              <p className="text-indigo-300 text-xs mt-0.5">auto-refunded on return</p>
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@ export default function LoginPage() {
 
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 lg:hidden">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#7b1fa2' }}>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#4f46e5' }}>
               <span className="text-white font-black text-sm">R</span>
             </div>
             <span className="text-gray-900 text-lg font-bold">RentEase</span>
@@ -170,7 +170,7 @@ export default function LoginPage() {
               <div className="au d2">
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-sm font-semibold text-gray-700">Password</label>
-                  <Link href="/reset-password" className="text-xs font-medium transition-colors" style={{ color: '#7b1fa2' }}>
+                  <Link href="/reset-password" className="text-xs font-medium transition-colors" style={{ color: '#4f46e5' }}>
                     Forgot password?
                   </Link>
                 </div>
@@ -206,7 +206,7 @@ export default function LoginPage() {
 
             <div className="space-y-2.5 au d5">
               <Link href="/signup" className="odoo-outline">Create a customer account</Link>
-              <Link href="/vendor-signup" className="odoo-outline" style={{ borderColor: '#f3e5f5', color: '#7b1fa2' }}>
+              <Link href="/vendor-signup" className="odoo-outline" style={{ borderColor: '#eef2ff', color: '#4f46e5' }}>
                 Register as a Vendor
               </Link>
             </div>
@@ -214,8 +214,8 @@ export default function LoginPage() {
 
           <p className="text-center text-xs text-gray-400 mt-5 au d6">
             By continuing, you agree to our{' '}
-            <span className="hover:underline cursor-pointer" style={{ color: '#7b1fa2' }}>Terms</span> &{' '}
-            <span className="hover:underline cursor-pointer" style={{ color: '#7b1fa2' }}>Privacy</span>
+            <span className="hover:underline cursor-pointer" style={{ color: '#4f46e5' }}>Terms</span> &{' '}
+            <span className="hover:underline cursor-pointer" style={{ color: '#4f46e5' }}>Privacy</span>
           </p>
         </div>
       </div>

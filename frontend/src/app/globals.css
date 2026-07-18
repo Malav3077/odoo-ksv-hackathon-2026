@@ -4,66 +4,64 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 270 15% 12%;
+    --background: 210 40% 98%;
+    --foreground: 215 28% 17%;
     --card: 0 0% 100%;
-    --card-foreground: 270 15% 12%;
+    --card-foreground: 215 28% 17%;
     --popover: 0 0% 100%;
-    --popover-foreground: 270 15% 12%;
-    --primary: 271 64% 40%;
+    --popover-foreground: 215 28% 17%;
+    --primary: 239 84% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 270 20% 96%;
-    --secondary-foreground: 270 15% 20%;
-    --muted: 270 15% 96%;
-    --muted-foreground: 270 10% 50%;
-    --accent: 270 25% 94%;
-    --accent-foreground: 270 40% 30%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 215 25% 25%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 94%;
+    --accent-foreground: 215 28% 20%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 270 15% 90%;
-    --input: 270 15% 90%;
-    --ring: 271 64% 50%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 239 84% 60%;
     --radius: 0.5rem;
-    /* sidebar — light purple tint */
-    --sidebar-background: 270 30% 98%;
-    --sidebar-foreground: 270 15% 25%;
-    --sidebar-primary: 271 64% 40%;
+    --sidebar-background: 215 28% 17%;
+    --sidebar-foreground: 210 30% 85%;
+    --sidebar-primary: 239 84% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 30% 92%;
-    --sidebar-accent-foreground: 271 50% 28%;
-    --sidebar-border: 270 20% 88%;
-    --sidebar-ring: 271 64% 50%;
+    --sidebar-accent: 215 25% 24%;
+    --sidebar-accent-foreground: 210 30% 88%;
+    --sidebar-border: 215 25% 22%;
+    --sidebar-ring: 239 84% 65%;
   }
 
   .dark {
-    --background: 270 20% 8%;
-    --foreground: 270 10% 95%;
-    --card: 270 18% 12%;
-    --card-foreground: 270 10% 95%;
-    --popover: 270 18% 12%;
-    --popover-foreground: 270 10% 95%;
-    --primary: 271 64% 60%;
+    --background: 215 28% 9%;
+    --foreground: 210 40% 95%;
+    --card: 215 28% 13%;
+    --card-foreground: 210 40% 95%;
+    --popover: 215 28% 13%;
+    --popover-foreground: 210 40% 95%;
+    --primary: 239 84% 68%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 270 15% 18%;
-    --secondary-foreground: 270 10% 90%;
-    --muted: 270 15% 18%;
-    --muted-foreground: 270 10% 55%;
-    --accent: 270 20% 22%;
-    --accent-foreground: 270 30% 85%;
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 210 30% 88%;
+    --muted: 215 25% 18%;
+    --muted-foreground: 215 16% 56%;
+    --accent: 215 25% 22%;
+    --accent-foreground: 210 30% 88%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 270 15% 20%;
-    --input: 270 15% 20%;
-    --ring: 271 64% 60%;
-    /* sidebar dark */
-    --sidebar-background: 270 22% 10%;
-    --sidebar-foreground: 270 10% 90%;
-    --sidebar-primary: 271 64% 65%;
+    --border: 215 25% 22%;
+    --input: 215 25% 22%;
+    --ring: 239 84% 68%;
+    --sidebar-background: 215 28% 10%;
+    --sidebar-foreground: 210 30% 85%;
+    --sidebar-primary: 239 84% 68%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 20% 18%;
-    --sidebar-accent-foreground: 270 30% 88%;
-    --sidebar-border: 270 15% 18%;
-    --sidebar-ring: 271 64% 60%;
+    --sidebar-accent: 215 25% 18%;
+    --sidebar-accent-foreground: 210 30% 85%;
+    --sidebar-border: 215 25% 18%;
+    --sidebar-ring: 239 84% 68%;
   }
 
   * { @apply border-border; }
@@ -71,8 +69,8 @@
 }
 
 body {
-  background: #fff;
-  color: #1f1435;
+  background: #f8fafc;
+  color: #1e293b;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -123,27 +121,23 @@ body {
 .d5  { animation-delay: .40s; }
 .d6  { animation-delay: .50s; }
 
-/* ── ODOO GRADIENT LEFT PANEL ── */
-/* Odoo.com brand colors: warm purple-maroon, NOT cold blue-violet */
 .odoo-left {
   background: linear-gradient(145deg,
-    #0f0221 0%,
-    #1a0535 15%,
-    #2e0a55 30%,
-    #52107a 50%,
-    #7b1fa2 72%,
-    #9c27b0 88%,
-    #ab47bc 100%
+    #0f172a 0%,
+    #1e293b 20%,
+    #1e1b4b 45%,
+    #312e81 70%,
+    #4338ca 88%,
+    #4f46e5 100%
   );
   position: relative;
 }
 
-/* animated warm-purple overlay */
 .odoo-left::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(220deg, rgba(156,39,176,.3) 0%, transparent 45%, rgba(123,31,162,.2) 100%);
+  background: linear-gradient(220deg, rgba(79,70,229,.25) 0%, transparent 50%, rgba(67,56,202,.15) 100%);
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
   pointer-events: none;
@@ -164,8 +158,8 @@ body {
 }
 .odoo-input::placeholder { color: #9ca3af; }
 .odoo-input:focus {
-  border-color: #7b1fa2;
-  box-shadow: 0 0 0 3px rgba(123,31,162,.15);
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79,70,229,.12);
 }
 .odoo-input.e {
   border-color: #ef4444;
@@ -181,7 +175,7 @@ body {
   gap: 8px;
   width: 100%;
   padding: 12px 20px;
-  background: linear-gradient(135deg, #8e24aa 0%, #6a1b9a 100%);
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
   color: #fff;
   font-weight: 600;
   font-size: 14.5px;
@@ -190,17 +184,17 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: all .22s ease;
-  box-shadow: 0 4px 14px rgba(106,27,154,.45), 0 1px 3px rgba(106,27,154,.3);
+  box-shadow: 0 4px 14px rgba(79,70,229,.35), 0 1px 3px rgba(79,70,229,.2);
   letter-spacing: .01em;
 }
 .odoo-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
-  box-shadow: 0 8px 24px rgba(106,27,154,.5), 0 2px 6px rgba(106,27,154,.3);
+  background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+  box-shadow: 0 8px 24px rgba(79,70,229,.45), 0 2px 6px rgba(79,70,229,.25);
   transform: translateY(-1px);
 }
 .odoo-btn:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(106,27,154,.3);
+  box-shadow: 0 2px 8px rgba(79,70,229,.25);
 }
 .odoo-btn:disabled { opacity: .55; cursor: not-allowed; }
 
@@ -218,9 +212,9 @@ body {
   text-decoration: none;
 }
 .odoo-outline:hover {
-  border-color: #7b1fa2;
-  color: #7b1fa2;
-  background: rgba(123,31,162,.05);
+  border-color: #4f46e5;
+  color: #4f46e5;
+  background: rgba(79,70,229,.05);
 }
 
 /* ── ODOO CARD ── */
@@ -246,9 +240,9 @@ body {
 }
 
 /* ── RULE CHECKER ── */
-.rule-met  { color: #ce93d8; }
+.rule-met  { color: #818cf8; }
 .rule-no   { color: rgba(255,255,255,.35); }
-.rule-dot-met { background:#ce93d8; border-color:#ce93d8; }
+.rule-dot-met { background:#818cf8; border-color:#818cf8; }
 .rule-dot-no  { border-color:rgba(255,255,255,.25); }
 
 @keyframes fadeInUp {
