@@ -29,9 +29,11 @@ export default function LoginPage() {
     setLoading(true)
     try {
       const res = await api.post('/auth/login/', { email: form.email, password: form.password })
-      login(res.data.user, res.data.access, res.data.refresh)
+      const user = res.data.user
+      login(user, res.data.access, res.data.refresh)
       setSuccess('Login successful! Redirecting...')
-      setTimeout(() => { window.location.href = '/shop' }, 1200)
+      const dest = (user.role === 'admin' || user.role === 'vendor') ? '/dashboard' : '/shop'
+      setTimeout(() => { window.location.href = dest }, 1200)
     } catch (err) {
       setError(err.response?.data?.detail || 'Invalid email or password.')
       setLoading(false)
