@@ -16,8 +16,8 @@ function CartItem({ item, onUpdateQty, onRemove }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-4 flex gap-4 relative">
       <div className="w-20 h-20 bg-gray-100 rounded-xl flex-shrink-0 overflow-hidden">
-        {item.product?.image ? (
-          <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
+        {item.product?.image_url ? (
+          <img src={item.product.image_url} alt={item.product.name} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-300">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

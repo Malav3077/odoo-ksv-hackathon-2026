@@ -108,8 +108,8 @@ export default function ProductDetailPage() {
         {/* IMAGE */}
         <div className="space-y-3">
           <div className="bg-gray-100 rounded-2xl overflow-hidden aspect-square max-h-96 flex items-center justify-center">
-            {product.image ? (
-              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+            {product.image_url ? (
+              <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
             ) : (
               <div className="flex flex-col items-center text-gray-300">
                 <svg className="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

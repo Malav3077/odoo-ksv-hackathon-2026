@@ -16,9 +16,9 @@ function ProductCard({ product }) {
       className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-indigo-200 transition-all duration-200 group flex flex-col"
     >
       <div className="relative bg-gray-100 h-48 overflow-hidden">
-        {product.image ? (
+        {product.image_url ? (
           <img
-            src={product.image}
+            src={product.image_url}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
