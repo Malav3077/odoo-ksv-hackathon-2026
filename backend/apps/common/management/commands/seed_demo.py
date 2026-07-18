@@ -60,7 +60,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  products : {Product.objects.count()}")
         self.stdout.write(f"  orders   : {RentalOrder.objects.count()}")
         self.stdout.write(f"  invoices : {Invoice.objects.count()}")
-        self.stdout.write("  Open the dashboard: GET /api/reports/dashboard/")
+        self.stdout.write("  Dashboard KPIs: GET /api/dashboard/stats/")
 
     def _seed_catalog(self, admin):
         products = []
@@ -123,9 +123,9 @@ class Command(BaseCommand):
         # 5) Returned on time -> revenue, full deposit back
         o5 = make(products[4], 1, now - timedelta(days=5), now - timedelta(days=1))
         rsvc.mark_pickup(o5, admin, when=now - timedelta(days=5))
-        rsvc.mark_return(o5, admin, when=now - timedelta(days=1, hours=2))
+        rsvc.settle_return(o5, admin, when=now - timedelta(days=1, hours=2))
 
         # 6) Returned late -> late fee charged, deposit partly withheld
         o6 = make(products[0], 1, now - timedelta(days=4), now - timedelta(days=2))
         rsvc.mark_pickup(o6, admin, when=now - timedelta(days=4))
-        rsvc.mark_return(o6, admin, when=now - timedelta(days=1, hours=20))
+        rsvc.settle_return(o6, admin, when=now - timedelta(days=1, hours=20))
