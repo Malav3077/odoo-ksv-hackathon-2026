@@ -99,6 +99,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             service_fn(order, self.request.user)
         except ValueError as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+        order = self.get_queryset().get(pk=order.pk)
         return Response(RentalOrderSerializer(order).data)
 
     @action(detail=True, methods=["post"], url_path="send-quotation")
@@ -125,4 +126,4 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path="return")
     def return_order(self, request, pk=None):
-        return self._run(services.mark_return)
+        return self._run(services.settle_return)

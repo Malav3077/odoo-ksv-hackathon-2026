@@ -1,8 +1,10 @@
+from datetime import timedelta
 from decimal import Decimal
 
 from django.db import transaction
 from django.utils import timezone
 
+from apps.catalog.models import Product
 from apps.common.models import ActivityLog
 
 from .models import RentalOrder, RentalOrderLine
@@ -107,12 +109,61 @@ def mark_pickup(order, user, when=None):
     return _transition(order, status, "Marked pickup for", user)
 
 
-def mark_return(order, user, when=None):
+def _add_late_fee_line(order, late_fee, when):
+    product, _ = Product.objects.get_or_create(
+        name="Late Fees",
+        defaults={"product_type": "service", "sales_price": 0, "is_published": False},
+    )
+    RentalOrderLine.objects.create(
+        order=order,
+        product=product,
+        quantity=1,
+        unit="Fee",
+        unit_price=late_fee,
+        amount=late_fee,
+        rental_start=order.return_date,
+        rental_end=when,
+    )
+
+
+@transaction.atomic
+def settle_return(order, user, when=None):
     if order.status not in ("picked_up", "late_pickup"):
         raise ValueError("Only a picked-up order can be returned.")
     when = when or timezone.now()
+
+    grace_hours = 0
+    rate_per_hour = Decimal("0")
+    for line in order.lines.select_related("product__rental_config"):
+        product = line.product
+        if product and hasattr(product, "rental_config"):
+            config = product.rental_config
+            grace_hours = max(grace_hours, config.padding_time)
+            rate_per_hour += config.late_fee_per_hour * line.quantity
+
+    scheduled = order.return_date
+    late_delta = when - scheduled - timedelta(hours=grace_hours)
+    hours_late = max(0, late_delta.total_seconds() / 3600)
+
+    deposit = order.security_deposit_held
+    if hours_late <= 0:
+        late_fee = Decimal("0")
+        new_status = "returned"
+    else:
+        late_fee = Decimal(round(hours_late)) * rate_per_hour
+        late_fee = min(late_fee, deposit)
+        new_status = "late_return"
+        _add_late_fee_line(order, late_fee, when)
+
     order.actual_return_date = when
-    order.deposit_refunded = order.security_deposit_held
-    order.save(update_fields=["actual_return_date", "deposit_refunded"])
-    status = "late_return" if when > order.return_date else "returned"
-    return _transition(order, status, "Marked return for", user)
+    order.late_fee_charged = late_fee
+    order.deposit_refunded = deposit - late_fee
+    order.save(update_fields=["actual_return_date", "late_fee_charged", "deposit_refunded"])
+    ActivityLog.objects.create(
+        user=user,
+        action=(
+            f"Settled return {order.order_reference}: late_fee={late_fee}, "
+            f"refund={order.deposit_refunded}"
+        ),
+    )
+    return _transition(order, new_status, "Returned", user)
