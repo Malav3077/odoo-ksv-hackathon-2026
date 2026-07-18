@@ -1,3 +1,4 @@
+import math
 from decimal import Decimal
 
 from django.db import transaction
@@ -107,12 +108,37 @@ def mark_pickup(order, user, when=None):
     return _transition(order, status, "Marked pickup for", user)
 
 
+def compute_late_fee(order, when):
+    """Late fee = late_fee_per_hour x hours_late x quantity, summed over lines.
+
+    Hours late are rounded up so any part-hour counts as a full hour.
+    Returns Decimal("0") for on-time returns.
+    """
+    if when <= order.return_date:
+        return Decimal("0")
+    seconds_late = (when - order.return_date).total_seconds()
+    hours_late = Decimal(math.ceil(seconds_late / 3600))
+    fee = Decimal("0")
+    for line in order.lines.select_related("product__rental_config"):
+        product = line.product
+        if product is not None and hasattr(product, "rental_config"):
+            fee += product.rental_config.late_fee_per_hour * hours_late * line.quantity
+    return fee.quantize(Decimal("0.01"))
+
+
 def mark_return(order, user, when=None):
     if order.status not in ("picked_up", "late_pickup"):
         raise ValueError("Only a picked-up order can be returned.")
     when = when or timezone.now()
+    late_fee = compute_late_fee(order, when)
+    refund = order.security_deposit_held - late_fee
+    if refund < 0:
+        refund = Decimal("0")
     order.actual_return_date = when
-    order.deposit_refunded = order.security_deposit_held
-    order.save(update_fields=["actual_return_date", "deposit_refunded"])
+    order.late_fee_charged = late_fee
+    order.deposit_refunded = refund
+    order.save(
+        update_fields=["actual_return_date", "late_fee_charged", "deposit_refunded"]
+    )
     status = "late_return" if when > order.return_date else "returned"
     return _transition(order, status, "Marked return for", user)
