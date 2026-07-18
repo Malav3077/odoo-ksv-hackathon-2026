@@ -9,7 +9,7 @@ urlpatterns = [
     path("api/", include("apps.catalog.urls")),
     path("api/", include("apps.rentals.urls")),
     path("api/", include("apps.billing.urls")),
-    path("api/reports/", include("apps.reports.urls")),
+    path("api/", include("apps.reports.urls")),
 ]
 
 if settings.DEBUG:

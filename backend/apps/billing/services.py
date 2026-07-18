@@ -92,11 +92,16 @@ def render_invoice_pdf(invoice):
 
     y -= 4 * mm
     pdf.setFont("Helvetica", 10)
-    for label, value in (
+    rows = [
         ("Untaxed Amount", invoice.untaxed_amount),
         ("Tax (10%)", invoice.tax_amount),
         ("Security Deposit", order.security_deposit_held),
-    ):
+    ]
+    if order.late_fee_charged > 0:
+        rows.append(("Late Fee (from deposit)", order.late_fee_charged))
+    if order.actual_return_date:
+        rows.append(("Deposit Refunded", order.deposit_refunded))
+    for label, value in rows:
         pdf.drawRightString(150 * mm, y, f"{label}:")
         pdf.drawRightString(width - 22 * mm, y, str(value))
         y -= 6 * mm
