@@ -12,6 +12,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(serializers.ModelSerializer):
     order_reference = serializers.CharField(source="order.order_reference", read_only=True)
+    customer_name = serializers.CharField(source="order.customer.username", read_only=True)
 
     class Meta:
         model = Invoice
@@ -19,6 +20,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "id",
             "order",
             "order_reference",
+            "customer_name",
             "invoice_number",
             "invoice_date",
             "status",

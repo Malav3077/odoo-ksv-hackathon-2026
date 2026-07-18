@@ -20,6 +20,17 @@ def _orders_for(user):
     return qs
 
 
+class InvoiceListView(generics.ListAPIView):
+    serializer_class = InvoiceSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = Invoice.objects.select_related("order__customer").order_by("-id")
+        if self.request.user.role == "customer":
+            qs = qs.filter(order__customer=self.request.user)
+        return qs
+
+
 class OrderInvoiceView(APIView):
     permission_classes = [IsAuthenticated]
 

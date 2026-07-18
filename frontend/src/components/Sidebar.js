@@ -15,7 +15,7 @@ const NAV = [
     ),
   },
   {
-    href: '/pickup-return',
+    href: '/rentals',
     label: 'Orders',
     icon: (
       <svg className={i} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
@@ -35,10 +35,18 @@ const NAV = [
   {
     href: '/pickup-return',
     label: 'Pickup / Return',
-    hidden: true,
     icon: (
       <svg className={i} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h5M20 20v-5h-5M20 9A8 8 0 006 5.3M4 15a8 8 0 0014 3.7" />
+      </svg>
+    ),
+  },
+  {
+    href: '/invoices',
+    label: 'Invoices',
+    icon: (
+      <svg className={i} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg>
     ),
   },
