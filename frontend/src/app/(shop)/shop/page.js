@@ -3,8 +3,6 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import api from '@/lib/api'
 
-const CATEGORIES = ['All', 'Electronics', 'Furniture', 'Vehicles', 'Tools', 'Sports', 'Events', 'Other']
-
 function ProductCard({ product }) {
   const price = Number(product.sales_price || 0)
   const deposit = Number(product.rental_config?.security_deposit_amount || 0)
@@ -93,8 +91,17 @@ export default function ShopPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
-  const [category, setCategory] = useState('All')
+  const [categoryId, setCategoryId] = useState(null)
+  const [categoryLabel, setCategoryLabel] = useState('All')
+  const [categories, setCategories] = useState([])
   const [debouncedSearch, setDebouncedSearch] = useState('')
+
+  useEffect(() => {
+    api.get('/categories/').then(res => {
+      const data = res.data
+      setCategories(Array.isArray(data) ? data : data.results || [])
+    }).catch(() => {})
+  }, [])
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 400)
@@ -107,7 +114,7 @@ export default function ShopPage() {
     try {
       const params = {}
       if (debouncedSearch) params.search = debouncedSearch
-      if (category !== 'All') params.category = category
+      if (categoryId !== null) params.category = categoryId
       const res = await api.get('/products/', { params })
       const data = res.data
       setProducts(Array.isArray(data) ? data : data.results || [])
@@ -116,9 +123,14 @@ export default function ShopPage() {
     } finally {
       setLoading(false)
     }
-  }, [debouncedSearch, category])
+  }, [debouncedSearch, categoryId])
 
   useEffect(() => { fetchProducts() }, [fetchProducts])
+
+  function selectCategory(id, label) {
+    setCategoryId(id)
+    setCategoryLabel(label)
+  }
 
   const isEmpty = !loading && products.length === 0
 
@@ -152,17 +164,27 @@ export default function ShopPage() {
         </div>
 
         <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0">
-          {CATEGORIES.map((cat) => (
+          <button
+            onClick={() => selectCategory(null, 'All')}
+            className={`flex-shrink-0 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+              categoryId === null
+                ? 'bg-indigo-700 text-white shadow-sm'
+                : 'bg-white border border-gray-300 text-gray-600 hover:border-indigo-400 hover:text-indigo-700'
+            }`}
+          >
+            All
+          </button>
+          {categories.map((cat) => (
             <button
-              key={cat}
-              onClick={() => setCategory(cat)}
+              key={cat.id}
+              onClick={() => selectCategory(cat.id, cat.name)}
               className={`flex-shrink-0 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                category === cat
+                categoryId === cat.id
                   ? 'bg-indigo-700 text-white shadow-sm'
                   : 'bg-white border border-gray-300 text-gray-600 hover:border-indigo-400 hover:text-indigo-700'
               }`}
             >
-              {cat}
+              {cat.name}
             </button>
           ))}
         </div>
@@ -173,7 +195,7 @@ export default function ShopPage() {
           {products.length === 0
             ? 'No products found'
             : `${products.length} product${products.length !== 1 ? 's' : ''} available`}
-          {category !== 'All' && ` in ${category}`}
+          {categoryId !== null && ` in ${categoryLabel}`}
           {debouncedSearch && ` matching "${debouncedSearch}"`}
         </p>
       )}
@@ -199,10 +221,10 @@ export default function ShopPage() {
           </div>
           <h3 className="text-gray-700 font-semibold text-lg mb-1">No products found</h3>
           <p className="text-gray-400 text-sm mb-4">
-            {debouncedSearch || category !== 'All' ? 'Try a different search or category.' : 'No products are available right now.'}
+            {debouncedSearch || categoryId !== null ? 'Try a different search or category.' : 'No products are available right now.'}
           </p>
-          {(debouncedSearch || category !== 'All') && (
-            <button onClick={() => { setSearch(''); setCategory('All') }} className="text-sm text-indigo-600 font-medium hover:underline">
+          {(debouncedSearch || categoryId !== null) && (
+            <button onClick={() => { setSearch(''); selectCategory(null, 'All') }} className="text-sm text-indigo-600 font-medium hover:underline">
               Clear filters
             </button>
           )}
