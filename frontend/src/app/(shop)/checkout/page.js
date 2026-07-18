@@ -83,20 +83,23 @@ export default function CheckoutPage() {
       const lines = items.map(i => ({
         product: i.product.id,
         quantity: i.quantity,
-        rental_start: i.rental_start,
-        rental_end: i.rental_end,
+        rental_start: new Date(i.rental_start).toISOString(),
+        rental_end: new Date(i.rental_end).toISOString(),
       }))
+
+      const allStarts = items.map(i => new Date(i.rental_start))
+      const allEnds   = items.map(i => new Date(i.rental_end))
+      const pickup_date = new Date(Math.min(...allStarts)).toISOString()
+      const return_date = new Date(Math.max(...allEnds)).toISOString()
 
       const payload = {
         lines,
+        pickup_date,
+        return_date,
         delivery_method: deliveryMode,
-        payment: { method: paymentMethod },
       }
 
-      if (deliveryMode === 'delivery') {
-        payload.invoice_address = address
-        payload.delivery_address = address
-      }
+      // address fields are optional FK IDs — skip for now (store pickup needs none)
 
       const res = await api.post('/checkout/', payload)
       clearCart()

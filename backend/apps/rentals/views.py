@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.billing import services as billing_services
-from apps.common.permissions import IsAdminOrVendor, IsCustomer
+from apps.common.permissions import IsAdminOrVendor
 
 from . import services
 from .models import RentalOrder
@@ -29,7 +29,7 @@ def _line_payload(validated_lines):
 
 
 class CheckoutView(APIView):
-    permission_classes = [IsCustomer]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = CheckoutSerializer(data=request.data)

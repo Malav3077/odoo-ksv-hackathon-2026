@@ -79,8 +79,8 @@ class CheckoutSerializer(serializers.Serializer):
         return value
 
     def validate(self, data):
-        if data["return_date"] <= data["pickup_date"]:
-            raise serializers.ValidationError("Return date must be after pickup date.")
+        if data["return_date"] < data["pickup_date"]:
+            raise serializers.ValidationError("Return date cannot be before pickup date.")
         return data
 
 
