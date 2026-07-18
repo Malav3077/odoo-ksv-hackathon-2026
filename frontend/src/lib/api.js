@@ -5,10 +5,14 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
+const AUTH_ENDPOINTS = ['/auth/login', '/auth/register', '/auth/password-reset', '/auth/token/refresh']
+
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
+    const url = config.url || ''
+    const isAuthEndpoint = AUTH_ENDPOINTS.some((path) => url.includes(path))
     const token = localStorage.getItem('access_token')
-    if (token) {
+    if (token && !isAuthEndpoint) {
       config.headers.Authorization = `Bearer ${token}`
     }
   }
