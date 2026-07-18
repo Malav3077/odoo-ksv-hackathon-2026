@@ -12,8 +12,8 @@ const PAYMENT_METHODS = [
 ]
 
 const DELIVERY_MODES = [
-  { id: 'delivery', label: 'Home Delivery', icon: '🚚', desc: 'Delivered to your address' },
-  { id: 'pickup', label: 'Store Pickup', icon: '🏪', desc: 'Collect from our store' },
+  { id: 'standard_delivery', label: 'Home Delivery', icon: '🚚', desc: 'Delivered to your address' },
+  { id: 'store_pickup', label: 'Store Pickup', icon: '🏪', desc: 'Collect from our store' },
 ]
 
 function Step({ number, label, active, done }) {
@@ -42,7 +42,7 @@ export default function CheckoutPage() {
   const [step, setStep] = useState(1)
   const [placing, setPlacing] = useState(false)
   const [error, setError] = useState('')
-  const [deliveryMode, setDeliveryMode] = useState('delivery')
+  const [deliveryMode, setDeliveryMode] = useState('store_pickup')
   const [address, setAddress] = useState({ full_name: '', phone: '', address_line: '', city: '', zip_code: '', country: 'India' })
   const [paymentMethod, setPaymentMethod] = useState('upi')
   const [addressErrors, setAddressErrors] = useState({})
@@ -57,7 +57,7 @@ export default function CheckoutPage() {
 
   function validateAddress() {
     const errors = {}
-    if (deliveryMode === 'delivery') {
+    if (deliveryMode === 'standard_delivery') {
       if (!address.full_name.trim()) errors.full_name = 'Name is required'
       if (!address.phone.trim()) errors.phone = 'Phone is required'
       else if (!/^\d{10}$/.test(address.phone.trim())) errors.phone = 'Enter valid 10-digit phone'
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
                 ))}
               </div>
 
-              {deliveryMode === 'delivery' && (
+              {deliveryMode === 'standard_delivery' && (
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -210,7 +210,7 @@ export default function CheckoutPage() {
                 </div>
               )}
 
-              {deliveryMode === 'pickup' && (
+              {deliveryMode === 'store_pickup' && (
                 <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-sm text-indigo-800">
                   <p className="font-semibold mb-1">Store Address</p>
                   <p className="text-indigo-700">RentEase Store, KSV University Campus,<br />Gandhinagar, Gujarat — 382016</p>
@@ -286,13 +286,13 @@ export default function CheckoutPage() {
                 <div className="border-t border-gray-100 pt-3 space-y-1 text-sm">
                   <div className="flex justify-between text-gray-500">
                     <span>Delivery mode</span>
-                    <span className="font-medium text-gray-700">{deliveryMode === 'pickup' ? 'Store Pickup' : 'Home Delivery'}</span>
+                    <span className="font-medium text-gray-700">{deliveryMode === 'store_pickup' ? 'Store Pickup' : 'Home Delivery'}</span>
                   </div>
                   <div className="flex justify-between text-gray-500">
                     <span>Payment method</span>
                     <span className="font-medium text-gray-700">{PAYMENT_METHODS.find(m => m.id === paymentMethod)?.label}</span>
                   </div>
-                  {deliveryMode === 'delivery' && (
+                  {deliveryMode === 'standard_delivery' && (
                     <div className="flex justify-between text-gray-500">
                       <span>Deliver to</span>
                       <span className="font-medium text-gray-700 text-right max-w-40">{address.full_name}, {address.city}</span>

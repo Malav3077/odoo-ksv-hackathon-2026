@@ -41,6 +41,8 @@ export default function OrderDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [invoiceLoading, setInvoiceLoading] = useState(false)
+  const [returning, setReturning] = useState(false)
+  const [returnMsg, setReturnMsg] = useState('')
 
   useEffect(() => {
     async function fetchOrder() {
@@ -60,6 +62,22 @@ export default function OrderDetailPage() {
     }
     fetchOrder()
   }, [id])
+
+  async function handleReturn() {
+    if (!window.confirm('Confirm return of all items in this order?')) return
+    setReturning(true)
+    setReturnMsg('')
+    try {
+      await api.post(`/orders/${id}/return/`)
+      const res = await api.get(`/orders/${id}/`)
+      setOrder(res.data)
+      setReturnMsg('Return confirmed! Deposit refund will be processed shortly.')
+    } catch (err) {
+      setReturnMsg(err.response?.data?.detail || 'Return failed. Please contact support.')
+    } finally {
+      setReturning(false)
+    }
+  }
 
   async function handleDownloadInvoice() {
     if (!invoice?.id) return
@@ -156,6 +174,37 @@ export default function OrderDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Return action */}
+      {['picked_up', 'late_pickup'].includes(order.status) && (
+        <div className="bg-white rounded-2xl border border-indigo-200 p-5 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p className="font-semibold text-gray-900 text-sm">Ready to return?</p>
+              <p className="text-xs text-gray-500 mt-0.5">Click below to confirm you have returned all items.</p>
+            </div>
+            <button onClick={handleReturn} disabled={returning}
+              className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm disabled:opacity-50 flex-shrink-0">
+              {returning ? (
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h5M20 20v-5h-5M20 9A8 8 0 006 5.3M4 15a8 8 0 0014 3.7"/>
+                </svg>
+              )}
+              {returning ? 'Processing...' : 'Return Items'}
+            </button>
+          </div>
+          {returnMsg && (
+            <div className={`mt-3 text-sm px-4 py-2.5 rounded-xl ${returnMsg.includes('failed') || returnMsg.includes('error') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+              {returnMsg}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Order lines */}
       {lines.length > 0 && (
