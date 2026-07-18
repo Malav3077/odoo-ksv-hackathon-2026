@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { Eye, EyeOff } from 'lucide-react'
 import api from '@/lib/api'
 
 function Rule({ met, text }) {
@@ -22,6 +23,7 @@ export default function SignupPage() {
   const [showCpw, setShowCpw] = useState(false)
   const [fe, setFe] = useState({})
   const [ge, setGe] = useState('')
+  const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
 
   const pw = form.password
@@ -61,12 +63,14 @@ export default function SignupPage() {
         password: form.password, confirm_password: form.confirm_password,
         first_name: form.first_name, last_name: form.last_name,
       })
-      router.push('/login?registered=true')
+      setSuccess('Account created successfully! Redirecting to login...')
+      setTimeout(() => { window.location.href = '/login?registered=true' }, 1500)
     } catch (err) {
       const d = err.response?.data
       if (d && typeof d === 'object') setFe(d)
       else setGe('Registration failed. Please try again.')
-    } finally { setLoading(false) }
+      setLoading(false)
+    }
   }
 
   const ic = f => `odoo-input${fe[f] ? ' e' : ''}`
@@ -170,6 +174,15 @@ export default function SignupPage() {
               </p>
             </div>
 
+            {success && (
+              <div className="mb-5 as flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg text-sm">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
+                </svg>
+                {success}
+              </div>
+            )}
+
             {ge && (
               <div className="mb-5 as flex items-center gap-2.5 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -211,9 +224,9 @@ export default function SignupPage() {
                 <div className="relative">
                   <input type={showPw ? 'text' : 'password'} name="password" value={form.password} onChange={onChange}
                     placeholder="Create a strong password" className={ic('password')} style={{ paddingRight: '44px' }} />
-                  <button type="button" onClick={() => setShowPw(!showPw)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-violet-600 transition-colors text-sm">
-                    {showPw ? '🙈' : '👁️'}
+                  <button type="button" onClick={() => setShowPw(p => !p)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors z-10 p-1">
+                    {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 {err('password') && <p className="text-red-500 text-xs mt-1">{err('password')}</p>}
@@ -232,9 +245,9 @@ export default function SignupPage() {
                 <div className="relative">
                   <input type={showCpw ? 'text' : 'password'} name="confirm_password" value={form.confirm_password} onChange={onChange}
                     placeholder="Repeat your password" className={ic('confirm_password')} style={{ paddingRight: '44px' }} />
-                  <button type="button" onClick={() => setShowCpw(!showCpw)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-violet-600 transition-colors text-sm">
-                    {showCpw ? '🙈' : '👁️'}
+                  <button type="button" onClick={() => setShowCpw(p => !p)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors z-10 p-1">
+                    {showCpw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 {err('confirm_password') && <p className="text-red-500 text-xs mt-1">{err('confirm_password')}</p>}

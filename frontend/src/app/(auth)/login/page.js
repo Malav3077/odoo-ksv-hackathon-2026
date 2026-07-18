@@ -1,17 +1,22 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import api from '@/lib/api'
 
 export default function LoginPage() {
   const router = useRouter()
+  const params = useSearchParams()
   const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '' })
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const justRegistered = params.get('registered') === 'true'
 
   function onChange(e) { setForm(f => ({ ...f, [e.target.name]: e.target.value })); setError('') }
 
@@ -22,10 +27,12 @@ export default function LoginPage() {
     try {
       const res = await api.post('/auth/login/', { email: form.email, password: form.password })
       login(res.data.user, res.data.access, res.data.refresh)
-      router.push('/shop')
+      setSuccess('Login successful! Redirecting...')
+      setTimeout(() => { window.location.href = '/shop' }, 1200)
     } catch (err) {
       setError(err.response?.data?.detail || 'Invalid email or password.')
-    } finally { setLoading(false) }
+      setLoading(false)
+    }
   }
 
   return (
@@ -123,6 +130,24 @@ export default function LoginPage() {
               <p className="text-gray-500 text-sm">Sign in to your RentEase account</p>
             </div>
 
+            {justRegistered && !success && (
+              <div className="mb-5 as flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg text-sm">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
+                </svg>
+                Account created successfully! Please sign in.
+              </div>
+            )}
+
+            {success && (
+              <div className="mb-5 as flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg text-sm">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
+                </svg>
+                {success}
+              </div>
+            )}
+
             {error && (
               <div className="mb-5 as flex items-center gap-2.5 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -150,9 +175,9 @@ export default function LoginPage() {
                   <input type={showPw ? 'text' : 'password'} name="password" value={form.password}
                     onChange={onChange} placeholder="••••••••"
                     className="odoo-input" style={{ paddingRight: '44px' }} />
-                  <button type="button" onClick={() => setShowPw(!showPw)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 transition-colors text-sm" style={{ ':hover': { color: '#7b1fa2' } }}>
-                    {showPw ? '🙈' : '👁️'}
+                  <button type="button" onClick={() => setShowPw(p => !p)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors z-10 p-1">
+                    {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
