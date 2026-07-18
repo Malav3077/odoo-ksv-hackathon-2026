@@ -24,26 +24,20 @@ import {
 } from "@/config/navigation";
 
 /** href -> human label, sourced from the nav config. */
-const LABELS: Record<string, string> = Object.fromEntries(
+const LABELS = Object.fromEntries(
   [...primaryNav.flatMap((g) => g.items), ...secondaryNav, ...utilityNav].map(
     (item) => [item.href, item.title],
   ),
 );
 
-function titleize(segment: string) {
+function titleize(segment) {
   return segment
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
 
-interface Crumb {
-  label: string;
-  href: string;
-  isLast: boolean;
-}
-
-function useBreadcrumbs(pathname: string): Crumb[] {
+function useBreadcrumbs(pathname) {
   return React.useMemo(() => {
     const segments = pathname.split("/").filter(Boolean);
     if (segments.length === 0) {

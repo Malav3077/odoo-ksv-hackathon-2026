@@ -2,13 +2,6 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-interface PageHeaderProps extends React.ComponentProps<"div"> {
-  title: string;
-  description?: string;
-  /** Right-aligned actions (buttons, filters, etc.). */
-  actions?: React.ReactNode;
-}
-
 /**
  * Consistent page title block: heading + supporting copy on the left,
  * actions on the right. Collapses to a stacked layout on small screens.
@@ -19,7 +12,7 @@ export function PageHeader({
   actions,
   className,
   ...props
-}: PageHeaderProps) {
+}) {
   return (
     <div
       className={cn(

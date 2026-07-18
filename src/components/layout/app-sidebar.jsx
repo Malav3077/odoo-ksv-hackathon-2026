@@ -29,12 +29,12 @@ import { siteConfig } from "@/config/site";
 import { Box } from "lucide-react";
 
 /** Determine whether a nav href matches the current route. */
-function isActive(pathname: string, href: string) {
+function isActive(pathname, href) {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar(props) {
   const pathname = usePathname();
 
   return (

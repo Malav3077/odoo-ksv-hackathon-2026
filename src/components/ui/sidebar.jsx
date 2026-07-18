@@ -3,7 +3,7 @@
 import * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -32,17 +32,7 @@ const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
-type SidebarContextProps = {
-  state: "expanded" | "collapsed"
-  open: boolean
-  setOpen: (open: boolean) => void
-  openMobile: boolean
-  setOpenMobile: (open: boolean) => void
-  isMobile: boolean
-  toggleSidebar: () => void
-}
-
-const SidebarContext = React.createContext<SidebarContextProps | null>(null)
+const SidebarContext = React.createContext(null)
 
 function useSidebar() {
   const context = React.useContext(SidebarContext)
@@ -61,10 +51,6 @@ function SidebarProvider({
   style,
   children,
   ...props
-}: React.ComponentProps<"div"> & {
-  defaultOpen?: boolean
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
 }) {
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
@@ -74,7 +60,7 @@ function SidebarProvider({
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
-    (value: boolean | ((value: boolean) => boolean)) => {
+    (value) => {
       const openState = typeof value === "function" ? value(open) : value
       if (setOpenProp) {
         setOpenProp(openState)
@@ -95,7 +81,7 @@ function SidebarProvider({
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event) => {
       if (
         event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
         (event.metaKey || event.ctrlKey)
@@ -113,7 +99,7 @@ function SidebarProvider({
   // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed"
 
-  const contextValue = React.useMemo<SidebarContextProps>(
+  const contextValue = React.useMemo(
     () => ({
       state,
       open,
@@ -135,7 +121,7 @@ function SidebarProvider({
             "--sidebar-width": SIDEBAR_WIDTH,
             "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
             ...style,
-          } as React.CSSProperties
+          }
         }
         className={cn(
           "group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar",
@@ -157,10 +143,6 @@ function Sidebar({
   children,
   dir,
   ...props
-}: React.ComponentProps<"div"> & {
-  side?: "left" | "right"
-  variant?: "sidebar" | "floating" | "inset"
-  collapsible?: "offcanvas" | "icon" | "none"
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
@@ -191,7 +173,7 @@ function Sidebar({
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-            } as React.CSSProperties
+            }
           }
           side={side}
         >
@@ -255,7 +237,7 @@ function SidebarTrigger({
   className,
   onClick,
   ...props
-}: React.ComponentProps<typeof Button>) {
+}) {
   const { toggleSidebar } = useSidebar()
 
   return (
@@ -277,7 +259,7 @@ function SidebarTrigger({
   )
 }
 
-function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
+function SidebarRail({ className, ...props }) {
   const { toggleSidebar } = useSidebar()
 
   return (
@@ -302,7 +284,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
   )
 }
 
-function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
+function SidebarInset({ className, ...props }) {
   return (
     <main
       data-slot="sidebar-inset"
@@ -318,7 +300,7 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
 function SidebarInput({
   className,
   ...props
-}: React.ComponentProps<typeof Input>) {
+}) {
   return (
     <Input
       data-slot="sidebar-input"
@@ -329,7 +311,7 @@ function SidebarInput({
   )
 }
 
-function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
+function SidebarHeader({ className, ...props }) {
   return (
     <div
       data-slot="sidebar-header"
@@ -340,7 +322,7 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
+function SidebarFooter({ className, ...props }) {
   return (
     <div
       data-slot="sidebar-footer"
@@ -354,7 +336,7 @@ function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
 function SidebarSeparator({
   className,
   ...props
-}: React.ComponentProps<typeof Separator>) {
+}) {
   return (
     <Separator
       data-slot="sidebar-separator"
@@ -365,7 +347,7 @@ function SidebarSeparator({
   )
 }
 
-function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
+function SidebarContent({ className, ...props }) {
   return (
     <div
       data-slot="sidebar-content"
@@ -379,7 +361,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function SidebarGroup({ className, ...props }: React.ComponentProps<"div">) {
+function SidebarGroup({ className, ...props }) {
   return (
     <div
       data-slot="sidebar-group"
@@ -394,10 +376,10 @@ function SidebarGroupLabel({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"div"> & React.ComponentProps<"div">) {
+}) {
   return useRender({
     defaultTagName: "div",
-    props: mergeProps<"div">(
+    props: mergeProps(
       {
         className: cn(
           "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
@@ -418,10 +400,10 @@ function SidebarGroupAction({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"button"> & React.ComponentProps<"button">) {
+}) {
   return useRender({
     defaultTagName: "button",
-    props: mergeProps<"button">(
+    props: mergeProps(
       {
         className: cn(
           "absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0",
@@ -441,7 +423,7 @@ function SidebarGroupAction({
 function SidebarGroupContent({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}) {
   return (
     <div
       data-slot="sidebar-group-content"
@@ -452,7 +434,7 @@ function SidebarGroupContent({
   )
 }
 
-function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">) {
+function SidebarMenu({ className, ...props }) {
   return (
     <ul
       data-slot="sidebar-menu"
@@ -463,7 +445,7 @@ function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">) {
   )
 }
 
-function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
+function SidebarMenuItem({ className, ...props }) {
   return (
     <li
       data-slot="sidebar-menu-item"
@@ -504,15 +486,11 @@ function SidebarMenuButton({
   tooltip,
   className,
   ...props
-}: useRender.ComponentProps<"button"> &
-  React.ComponentProps<"button"> & {
-    isActive?: boolean
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>
-  } & VariantProps<typeof sidebarMenuButtonVariants>) {
+}) {
   const { isMobile, state } = useSidebar()
   const comp = useRender({
     defaultTagName: "button",
-    props: mergeProps<"button">(
+    props: mergeProps(
       {
         className: cn(sidebarMenuButtonVariants({ variant, size }), className),
       },
@@ -555,13 +533,10 @@ function SidebarMenuAction({
   render,
   showOnHover = false,
   ...props
-}: useRender.ComponentProps<"button"> &
-  React.ComponentProps<"button"> & {
-    showOnHover?: boolean
-  }) {
+}) {
   return useRender({
     defaultTagName: "button",
-    props: mergeProps<"button">(
+    props: mergeProps(
       {
         className: cn(
           "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform group-data-[collapsible=icon]:hidden peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0",
@@ -583,7 +558,7 @@ function SidebarMenuAction({
 function SidebarMenuBadge({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}) {
   return (
     <div
       data-slot="sidebar-menu-badge"
@@ -601,8 +576,6 @@ function SidebarMenuSkeleton({
   className,
   showIcon = false,
   ...props
-}: React.ComponentProps<"div"> & {
-  showIcon?: boolean
 }) {
   // Random width between 50 to 90%.
   const [width] = React.useState(() => {
@@ -628,14 +601,14 @@ function SidebarMenuSkeleton({
         style={
           {
             "--skeleton-width": width,
-          } as React.CSSProperties
+          }
         }
       />
     </div>
   )
 }
 
-function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
+function SidebarMenuSub({ className, ...props }) {
   return (
     <ul
       data-slot="sidebar-menu-sub"
@@ -652,7 +625,7 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
 function SidebarMenuSubItem({
   className,
   ...props
-}: React.ComponentProps<"li">) {
+}) {
   return (
     <li
       data-slot="sidebar-menu-sub-item"
@@ -669,14 +642,10 @@ function SidebarMenuSubButton({
   isActive = false,
   className,
   ...props
-}: useRender.ComponentProps<"a"> &
-  React.ComponentProps<"a"> & {
-    size?: "sm" | "md"
-    isActive?: boolean
-  }) {
+}) {
   return useRender({
     defaultTagName: "a",
-    props: mergeProps<"a">(
+    props: mergeProps(
       {
         className: cn(
           "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",

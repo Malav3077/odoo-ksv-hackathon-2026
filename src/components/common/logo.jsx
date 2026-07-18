@@ -4,15 +4,10 @@ import { Box } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 
-interface LogoProps extends React.ComponentProps<"div"> {
-  /** Hide the wordmark, showing only the glyph (used in collapsed sidebar). */
-  iconOnly?: boolean;
-}
-
 /**
  * Brand mark: a compact gradient glyph plus the product wordmark.
  */
-export function Logo({ iconOnly = false, className, ...props }: LogoProps) {
+export function Logo({ iconOnly = false, className, ...props }) {
   return (
     <div className={cn("flex items-center gap-2", className)} {...props}>
       <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
