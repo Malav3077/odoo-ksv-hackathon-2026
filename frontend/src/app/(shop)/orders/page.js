@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import api from '@/lib/api'
 
+
 const STATUS_CONFIG = {
   quotation:    { label: 'Quotation',    color: 'bg-gray-100 text-gray-600',     dot: 'bg-gray-400'   },
   sent:         { label: 'Sent',         color: 'bg-blue-100 text-blue-700',     dot: 'bg-blue-500'   },
@@ -35,7 +36,7 @@ function OrderCard({ order }) {
     : '—'
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-purple-200 hover:shadow-md transition-all duration-200">
+    <Link href={`/orders/${order.id}`} className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-indigo-200 hover:shadow-md transition-all duration-200 block">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -108,7 +109,7 @@ function OrderCard({ order }) {
           </span>
         )}
       </div>
-    </div>
+    </Link>
   )
 }
 
