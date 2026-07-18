@@ -22,15 +22,13 @@ import {
   BookOpen,
 } from "lucide-react";
 
-import type { NavGroup, NavItem } from "@/types";
-
 /**
  * Primary sidebar navigation, grouped by domain area.
  *
  * Routes are declared here up-front so the shell reflects the full product
  * surface; the corresponding pages are implemented in later milestones.
  */
-export const primaryNav: NavGroup[] = [
+export const primaryNav = [
   {
     title: "Overview",
     items: [{ title: "Dashboard", href: "/", icon: LayoutDashboard }],
@@ -74,7 +72,7 @@ export const primaryNav: NavGroup[] = [
 /**
  * Secondary nav shown lower in the sidebar (config + help).
  */
-export const secondaryNav: NavItem[] = [
+export const secondaryNav = [
   { title: "Rental Periods", href: "/settings/periods", icon: Timer },
   { title: "Late Fee Rules", href: "/settings/late-fee-rules", icon: SlidersHorizontal },
   { title: "Team", href: "/settings/team", icon: UserCog },
@@ -84,7 +82,7 @@ export const secondaryNav: NavItem[] = [
 /**
  * Utility links pinned at the very bottom of the sidebar.
  */
-export const utilityNav: NavItem[] = [
+export const utilityNav = [
   { title: "Documentation", href: "/docs", icon: BookOpen },
   { title: "Support", href: "/support", icon: LifeBuoy },
 ];

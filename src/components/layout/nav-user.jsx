@@ -25,19 +25,18 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import type { AppUser } from "@/types";
 
 /**
  * Placeholder session user. Real auth/session wiring arrives in a later
  * milestone; this keeps the shell visually complete in the meantime.
  */
-const mockUser: AppUser = {
+const mockUser = {
   name: "Alex Morgan",
   email: "alex@rentflow.app",
   role: "admin",
 };
 
-function initials(name: string) {
+function initials(name) {
   return name
     .split(" ")
     .map((part) => part[0])
@@ -46,7 +45,7 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-export function NavUser({ user = mockUser }: { user?: AppUser }) {
+export function NavUser({ user = mockUser }) {
   const { isMobile } = useSidebar();
 
   return (

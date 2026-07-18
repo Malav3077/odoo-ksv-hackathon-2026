@@ -15,6 +15,4 @@ export const siteConfig = {
     support: "/support",
     status: "https://status.rentflow.app",
   },
-} as const;
-
-export type SiteConfig = typeof siteConfig;
+};

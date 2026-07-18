@@ -13,8 +13,6 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
  */
 export default async function AppLayout({
   children,
-}: {
-  children: React.ReactNode;
 }) {
   // Restore the user's sidebar collapsed/expanded preference on the server
   // to avoid a layout flash on first paint.
