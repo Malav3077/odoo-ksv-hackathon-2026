@@ -4,8 +4,10 @@
 
 body {
   background: #fff;
-  color: #1a1a2e;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #1f1435;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── ODOO-STYLE KEYFRAMES ── */
@@ -54,24 +56,26 @@ body {
 .d6  { animation-delay: .50s; }
 
 /* ── ODOO GRADIENT LEFT PANEL ── */
+/* Odoo.com brand colors: warm purple-maroon, NOT cold blue-violet */
 .odoo-left {
   background: linear-gradient(145deg,
-    #0d0628 0%,
-    #1a0a45 20%,
-    #2d1070 40%,
-    #4c1d95 65%,
-    #6d28d9 85%,
-    #7c3aed 100%
+    #0f0221 0%,
+    #1a0535 15%,
+    #2e0a55 30%,
+    #52107a 50%,
+    #7b1fa2 72%,
+    #9c27b0 88%,
+    #ab47bc 100%
   );
   position: relative;
 }
 
-/* animated gradient overlay */
+/* animated warm-purple overlay */
 .odoo-left::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(220deg, rgba(124,58,237,.35) 0%, transparent 50%, rgba(109,40,217,.25) 100%);
+  background: linear-gradient(220deg, rgba(156,39,176,.3) 0%, transparent 45%, rgba(123,31,162,.2) 100%);
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
   pointer-events: none;
@@ -92,8 +96,8 @@ body {
 }
 .odoo-input::placeholder { color: #9ca3af; }
 .odoo-input:focus {
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(124,58,237,.15);
+  border-color: #7b1fa2;
+  box-shadow: 0 0 0 3px rgba(123,31,162,.15);
 }
 .odoo-input.e {
   border-color: #ef4444;
@@ -101,6 +105,7 @@ body {
 }
 
 /* ── ODOO PRIMARY BUTTON ── */
+/* Odoo brand purple: warm, slightly magenta */
 .odoo-btn {
   display: inline-flex;
   align-items: center;
@@ -108,25 +113,26 @@ body {
   gap: 8px;
   width: 100%;
   padding: 12px 20px;
-  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  background: linear-gradient(135deg, #8e24aa 0%, #6a1b9a 100%);
   color: #fff;
   font-weight: 600;
   font-size: 14.5px;
+  font-family: 'Inter', sans-serif;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all .22s ease;
-  box-shadow: 0 4px 14px rgba(109,40,217,.4), 0 1px 3px rgba(109,40,217,.3);
+  box-shadow: 0 4px 14px rgba(106,27,154,.45), 0 1px 3px rgba(106,27,154,.3);
   letter-spacing: .01em;
 }
 .odoo-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
-  box-shadow: 0 8px 24px rgba(109,40,217,.45), 0 2px 6px rgba(109,40,217,.3);
+  background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
+  box-shadow: 0 8px 24px rgba(106,27,154,.5), 0 2px 6px rgba(106,27,154,.3);
   transform: translateY(-1px);
 }
 .odoo-btn:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(109,40,217,.3);
+  box-shadow: 0 2px 8px rgba(106,27,154,.3);
 }
 .odoo-btn:disabled { opacity: .55; cursor: not-allowed; }
 
@@ -144,9 +150,9 @@ body {
   text-decoration: none;
 }
 .odoo-outline:hover {
-  border-color: #7c3aed;
-  color: #7c3aed;
-  background: rgba(124,58,237,.04);
+  border-color: #7b1fa2;
+  color: #7b1fa2;
+  background: rgba(123,31,162,.05);
 }
 
 /* ── ODOO CARD ── */
@@ -172,7 +178,7 @@ body {
 }
 
 /* ── RULE CHECKER ── */
-.rule-met  { color: #a78bfa; }
+.rule-met  { color: #ce93d8; }
 .rule-no   { color: rgba(255,255,255,.35); }
-.rule-dot-met { background:#a78bfa; border-color:#a78bfa; }
+.rule-dot-met { background:#ce93d8; border-color:#ce93d8; }
 .rule-dot-no  { border-color:rgba(255,255,255,.25); }

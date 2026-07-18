@@ -27,10 +27,10 @@ export default function ResetPasswordPage() {
       {/* ══ LEFT PANEL ══ */}
       <div className="odoo-left hidden lg:flex lg:w-[52%] flex-col justify-between p-14 overflow-hidden">
 
-        <div className="absolute top-[-120px] right-[-120px] w-[380px] h-[380px] rounded-full bg-violet-500 opacity-20 blur-[80px]"
-          style={{ animation: 'glowPulse 7s ease-in-out infinite' }} />
-        <div className="absolute bottom-[-100px] left-[-80px] w-[320px] h-[320px] rounded-full bg-purple-700 opacity-25 blur-[70px]"
-          style={{ animation: 'glowPulse 9s ease-in-out infinite 1.5s' }} />
+        <div className="absolute top-[-120px] right-[-120px] w-[380px] h-[380px] rounded-full opacity-20 blur-[80px]"
+          style={{ background: '#9c27b0', animation: 'glowPulse 7s ease-in-out infinite' }} />
+        <div className="absolute bottom-[-100px] left-[-80px] w-[320px] h-[320px] rounded-full opacity-25 blur-[70px]"
+          style={{ background: '#6a1b9a', animation: 'glowPulse 9s ease-in-out infinite 1.5s' }} />
         <div className="absolute top-1/2 right-[-60px] -translate-y-1/2 w-[280px] h-[280px] rounded-full border border-white/[0.06]"
           style={{ animation: 'spinSlow 28s linear infinite' }} />
 
@@ -46,16 +46,16 @@ export default function ResetPasswordPage() {
         <div className="relative z-10">
           <div className="au">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3.5 py-1.5 mb-6">
-              <span className="w-1.5 h-1.5 bg-violet-300 rounded-full animate-pulse" />
-              <span className="text-violet-200 text-xs font-semibold tracking-wide">Account Recovery</span>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#ce93d8' }} />
+              <span className="text-purple-200 text-xs font-semibold tracking-wide">Account Recovery</span>
             </div>
             <h2 className="text-[40px] font-bold text-white leading-[1.15] mb-5 tracking-tight">
               Locked out?<br />
-              <span style={{ background: 'linear-gradient(90deg, #c4b5fd, #a78bfa, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              <span style={{ background: 'linear-gradient(90deg, #f48fb1, #ce93d8, #ab47bc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 We&apos;ll get you back in.
               </span>
             </h2>
-            <p className="text-violet-200/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
+            <p className="text-purple-200/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
               Enter your email and we&apos;ll send a secure link to reset your password instantly.
             </p>
           </div>
@@ -71,7 +71,7 @@ export default function ResetPasswordPage() {
                 <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-base flex-shrink-0">{f.icon}</div>
                 <div>
                   <p className="text-white text-sm font-semibold leading-none mb-0.5">{f.title}</p>
-                  <p className="text-violet-300 text-xs">{f.desc}</p>
+                  <p className="text-purple-300 text-xs">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -79,9 +79,9 @@ export default function ResetPasswordPage() {
 
           <div className="mt-10 au d3">
             <div className="glass-card af2 w-fit">
-              <p className="text-violet-300 text-[10px] font-semibold uppercase tracking-wider mb-1">Response time</p>
+              <p className="text-purple-300 text-[10px] font-semibold uppercase tracking-wider mb-1">Response time</p>
               <p className="text-white text-2xl font-bold">&lt; 60s</p>
-              <p className="text-violet-300 text-xs mt-0.5">reset link in your inbox</p>
+              <p className="text-purple-300 text-xs mt-0.5">reset link in your inbox</p>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function ResetPasswordPage() {
         <div className="w-full max-w-[400px]">
 
           <div className="flex items-center gap-2.5 mb-8 lg:hidden">
-            <div className="w-8 h-8 rounded-xl bg-violet-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#7b1fa2' }}>
               <span className="text-white font-black text-sm">R</span>
             </div>
             <span className="text-gray-900 text-lg font-bold">RentEase</span>
@@ -125,8 +125,8 @@ export default function ResetPasswordPage() {
           ) : (
             <div className="odoo-card au">
               <div className="mb-7">
-                <div className="w-12 h-12 bg-violet-50 border border-violet-100 rounded-xl flex items-center justify-center mb-5">
-                  <svg className="w-6 h-6 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={{ background: '#f3e5f5', border: '1px solid #e1bee7' }}>
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#7b1fa2' }}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                   </svg>
                 </div>
@@ -164,7 +164,7 @@ export default function ResetPasswordPage() {
               </form>
 
               <div className="mt-6 text-center au d3">
-                <Link href="/login" className="text-sm text-violet-600 hover:text-violet-800 font-semibold transition-colors">
+                <Link href="/login" className="text-sm font-semibold transition-colors" style={{ color: '#7b1fa2' }}>
                   ← Back to Sign in
                 </Link>
               </div>

@@ -78,10 +78,10 @@ export default function SignupPage() {
       {/* ══ LEFT PANEL ══ */}
       <div className="odoo-left hidden lg:flex lg:w-[52%] flex-col justify-between p-14 overflow-hidden">
 
-        <div className="absolute top-[-120px] right-[-120px] w-[380px] h-[380px] rounded-full bg-violet-500 opacity-20 blur-[80px]"
-          style={{ animation: 'glowPulse 6s ease-in-out infinite' }} />
-        <div className="absolute bottom-[-100px] left-[-80px] w-[320px] h-[320px] rounded-full bg-purple-700 opacity-25 blur-[70px]"
-          style={{ animation: 'glowPulse 9s ease-in-out infinite 3s' }} />
+        <div className="absolute top-[-120px] right-[-120px] w-[380px] h-[380px] rounded-full opacity-20 blur-[80px]"
+          style={{ background: '#9c27b0', animation: 'glowPulse 6s ease-in-out infinite' }} />
+        <div className="absolute bottom-[-100px] left-[-80px] w-[320px] h-[320px] rounded-full opacity-25 blur-[70px]"
+          style={{ background: '#6a1b9a', animation: 'glowPulse 9s ease-in-out infinite 3s' }} />
         <div className="absolute top-1/2 right-[-60px] -translate-y-1/2 w-[280px] h-[280px] rounded-full border border-white/[0.06]"
           style={{ animation: 'spinSlow 30s linear infinite' }} />
 
@@ -97,16 +97,16 @@ export default function SignupPage() {
         <div className="relative z-10">
           <div className="au">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3.5 py-1.5 mb-6">
-              <span className="w-1.5 h-1.5 bg-violet-300 rounded-full animate-pulse" />
-              <span className="text-violet-200 text-xs font-semibold tracking-wide">Get started free</span>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#ce93d8' }} />
+              <span className="text-purple-200 text-xs font-semibold tracking-wide">Get started free</span>
             </div>
             <h2 className="text-[40px] font-bold text-white leading-[1.15] mb-5 tracking-tight">
               Rent anything,<br />
-              <span style={{ background: 'linear-gradient(90deg, #c4b5fd, #a78bfa, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              <span style={{ background: 'linear-gradient(90deg, #f48fb1, #ce93d8, #ab47bc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 anywhere, anytime.
               </span>
             </h2>
-            <p className="text-violet-200/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
+            <p className="text-purple-200/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
               Join thousands of customers who rent smarter with RentEase.
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function SignupPage() {
                 <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-base flex-shrink-0">{f.icon}</div>
                 <div>
                   <p className="text-white text-sm font-semibold leading-none mb-0.5">{f.title}</p>
-                  <p className="text-violet-300 text-xs">{f.desc}</p>
+                  <p className="text-purple-300 text-xs">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -138,7 +138,7 @@ export default function SignupPage() {
                 </div>
                 <div>
                   <p className="text-white text-sm font-semibold">1,200+ customers</p>
-                  <p className="text-violet-300 text-xs">already on RentEase</p>
+                  <p className="text-purple-300 text-xs">already on RentEase</p>
                 </div>
               </div>
             </div>
@@ -155,7 +155,7 @@ export default function SignupPage() {
         <div className="w-full max-w-[420px]">
 
           <div className="flex items-center gap-2.5 mb-6 lg:hidden">
-            <div className="w-8 h-8 rounded-xl bg-violet-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#7b1fa2' }}>
               <span className="text-white font-black text-sm">R</span>
             </div>
             <span className="text-gray-900 text-lg font-bold">RentEase</span>
@@ -166,7 +166,7 @@ export default function SignupPage() {
               <h1 className="text-2xl font-bold text-gray-900 mb-1.5">Create account</h1>
               <p className="text-gray-500 text-sm">
                 Already have one?{' '}
-                <Link href="/login" className="text-violet-600 font-semibold hover:text-violet-800 transition-colors">Sign in</Link>
+                <Link href="/login" className="font-semibold transition-colors" style={{ color: '#7b1fa2' }}>Sign in</Link>
               </p>
             </div>
 
@@ -218,7 +218,7 @@ export default function SignupPage() {
                 </div>
                 {err('password') && <p className="text-red-500 text-xs mt-1">{err('password')}</p>}
                 {form.password.length > 0 && (
-                  <div className="mt-2.5 grid grid-cols-2 gap-1.5 p-3 bg-violet-50 border border-violet-100 rounded-xl as">
+                  <div className="mt-2.5 grid grid-cols-2 gap-1.5 p-3 bg-purple-50 border border-purple-100 rounded-xl as">
                     <Rule met={rules.length} text="6–12 characters" />
                     <Rule met={rules.upper} text="One uppercase" />
                     <Rule met={rules.lower} text="One lowercase" />
@@ -261,7 +261,7 @@ export default function SignupPage() {
 
             <p className="text-center text-xs text-gray-400 mt-5">
               Are you a vendor?{' '}
-              <Link href="/vendor-signup" className="text-violet-600 font-semibold hover:underline">Register as Vendor</Link>
+              <Link href="/vendor-signup" className="font-semibold hover:underline" style={{ color: '#7b1fa2' }}>Register as Vendor</Link>
             </p>
           </div>
         </div>
