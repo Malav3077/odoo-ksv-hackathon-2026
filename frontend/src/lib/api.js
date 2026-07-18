@@ -18,7 +18,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401 && typeof window !== 'undefined') {
+    const url = error.config?.url || ''
+    const isAuthRoute = url.includes('/auth/login') || url.includes('/auth/register')
+    if (error.response?.status === 401 && typeof window !== 'undefined' && !isAuthRoute) {
       localStorage.removeItem('access_token')
       localStorage.removeItem('refresh_token')
       localStorage.removeItem('user')

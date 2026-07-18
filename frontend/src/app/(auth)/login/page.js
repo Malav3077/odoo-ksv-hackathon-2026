@@ -1,22 +1,25 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import api from '@/lib/api'
 
 export default function LoginPage() {
   const router = useRouter()
-  const params = useSearchParams()
   const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '' })
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+  const [justRegistered, setJustRegistered] = useState(false)
 
-  const justRegistered = params.get('registered') === 'true'
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+    setJustRegistered(p.get('registered') === 'true')
+  }, [])
 
   function onChange(e) { setForm(f => ({ ...f, [e.target.name]: e.target.value })); setError('') }
 
