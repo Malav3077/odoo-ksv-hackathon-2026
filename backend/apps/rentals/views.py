@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.billing import services as billing_services
 from apps.common.permissions import IsAdminOrVendor, IsCustomer
 
 from . import services
@@ -44,10 +45,13 @@ class CheckoutView(APIView):
             delivery_address=data.get("delivery_address"),
             confirm=True,
         )
+        invoice = billing_services.generate_invoice(order)
+        billing_services.record_payments(order)
         return Response(
             {
                 "order_id": order.id,
                 "order_reference": order.order_reference,
+                "invoice_id": invoice.id,
                 "total_amount": str(order.total_amount),
                 "security_deposit_held": str(order.security_deposit_held),
             },
@@ -103,7 +107,13 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"])
     def confirm(self, request, pk=None):
-        return self._run(services.confirm_order)
+        order = self.get_object()
+        try:
+            services.confirm_order(order, request.user)
+        except ValueError as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+        billing_services.generate_invoice(order)
+        return Response(RentalOrderSerializer(order).data)
 
     @action(detail=True, methods=["post"])
     def cancel(self, request, pk=None):
