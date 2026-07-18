@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/context/AuthContext'
+import { CartProvider } from '@/context/CartContext'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
@@ -17,7 +18,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TooltipProvider delayDuration={200}>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider><CartProvider>{children}</CartProvider></AuthProvider>
           </TooltipProvider>
         </ThemeProvider>
       </body>
