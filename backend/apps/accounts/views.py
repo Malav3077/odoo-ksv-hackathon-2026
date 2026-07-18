@@ -1,7 +1,9 @@
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.common.models import ActivityLog
@@ -24,6 +26,8 @@ def _tokens_for(user):
 
 class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "register"
     serializer_class = RegisterSerializer
 
     def create(self, request, *args, **kwargs):
@@ -49,6 +53,8 @@ class VendorRegisterView(RegisterView):
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -72,6 +78,28 @@ class LoginView(APIView):
         return Response(data)
 
 
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        refresh = request.data.get("refresh")
+        if not refresh:
+            return Response(
+                {"detail": "Refresh token is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            token = RefreshToken(refresh)
+            token.blacklist()
+        except TokenError:
+            return Response(
+                {"detail": "Invalid or expired token."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        ActivityLog.objects.create(user=request.user, action="Logged out")
+        return Response({"detail": "Successfully logged out."})
+
+
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -81,6 +109,8 @@ class MeView(APIView):
 
 class PasswordResetView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "password_reset"
 
     def post(self, request):
         email = (request.data.get("email") or "").strip()
