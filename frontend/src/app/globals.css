@@ -3,143 +3,176 @@
 @tailwind utilities;
 
 body {
-  background: #f8fafc;
-  color: #0f172a;
+  background: #fff;
+  color: #1a1a2e;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ── KEYFRAMES ── */
+/* ── ODOO-STYLE KEYFRAMES ── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(22px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-20px); }
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(-22px); }
   to   { opacity: 1; transform: translateX(0); }
 }
-@keyframes scaleUp {
-  from { opacity: 0; transform: scale(0.95); }
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.93); }
   to   { opacity: 1; transform: scale(1); }
 }
-@keyframes floatY {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
 }
-@keyframes shimmerMove {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.08); }
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
-/* ── ANIMATION CLASSES ── */
-.anim-fade-up    { animation: fadeUp 0.5s cubic-bezier(.22,1,.36,1) both; }
-.anim-fade-in    { animation: fadeIn 0.4s ease both; }
-.anim-slide-left { animation: slideInLeft 0.45s cubic-bezier(.22,1,.36,1) both; }
-.anim-scale-up   { animation: scaleUp 0.35s cubic-bezier(.22,1,.36,1) both; }
-.anim-float      { animation: floatY 3s ease-in-out infinite; }
+/* ── UTILITIES ── */
+.au  { animation: fadeUp   0.55s cubic-bezier(.22,1,.36,1) both; }
+.al  { animation: fadeLeft 0.5s  cubic-bezier(.22,1,.36,1) both; }
+.as  { animation: scaleIn  0.4s  cubic-bezier(.22,1,.36,1) both; }
+.af  { animation: floatCard 4s ease-in-out infinite; }
+.af2 { animation: floatCard 5s ease-in-out infinite 1s; }
 
-.d-1 { animation-delay: 0.08s; }
-.d-2 { animation-delay: 0.16s; }
-.d-3 { animation-delay: 0.24s; }
-.d-4 { animation-delay: 0.32s; }
-.d-5 { animation-delay: 0.40s; }
-.d-6 { animation-delay: 0.48s; }
+.d1  { animation-delay: .08s; }
+.d2  { animation-delay: .16s; }
+.d3  { animation-delay: .24s; }
+.d4  { animation-delay: .32s; }
+.d5  { animation-delay: .40s; }
+.d6  { animation-delay: .50s; }
 
-/* ── PROFESSIONAL INPUT ── */
-.pro-input {
+/* ── ODOO GRADIENT LEFT PANEL ── */
+.odoo-left {
+  background: linear-gradient(145deg,
+    #0d0628 0%,
+    #1a0a45 20%,
+    #2d1070 40%,
+    #4c1d95 65%,
+    #6d28d9 85%,
+    #7c3aed 100%
+  );
+  position: relative;
+}
+
+/* animated gradient overlay */
+.odoo-left::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(220deg, rgba(124,58,237,.35) 0%, transparent 50%, rgba(109,40,217,.25) 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+  pointer-events: none;
+}
+
+/* ── ODOO INPUT ── */
+.odoo-input {
   width: 100%;
   background: #fff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
   padding: 11px 14px;
   font-size: 14px;
-  color: #0f172a;
-  transition: border-color .2s, box-shadow .2s, background .2s;
+  color: #111827;
+  transition: border-color .2s ease, box-shadow .2s ease;
   outline: none;
+  line-height: 1.5;
 }
-.pro-input::placeholder { color: #94a3b8; }
-.pro-input:hover  { border-color: #c7d2fe; }
-.pro-input:focus  {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99,102,241,.12);
-  background: #fafafe;
+.odoo-input::placeholder { color: #9ca3af; }
+.odoo-input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124,58,237,.15);
 }
-.pro-input.err {
-  border-color: #f87171;
-  box-shadow: 0 0 0 3px rgba(248,113,113,.1);
-  background: #fff8f8;
+.odoo-input.e {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.1);
 }
 
-/* ── PROFESSIONAL BUTTON ── */
-.pro-btn {
+/* ── ODOO PRIMARY BUTTON ── */
+.odoo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
-  background: #4f46e5;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
   color: #fff;
   font-weight: 600;
-  font-size: 14px;
-  padding: 11px 20px;
-  border-radius: 10px;
+  font-size: 14.5px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background .2s, transform .15s, box-shadow .2s;
-  box-shadow: 0 2px 8px rgba(79,70,229,.28), 0 1px 2px rgba(79,70,229,.2);
+  transition: all .22s ease;
+  box-shadow: 0 4px 14px rgba(109,40,217,.4), 0 1px 3px rgba(109,40,217,.3);
   letter-spacing: .01em;
 }
-.pro-btn:hover:not(:disabled) {
-  background: #4338ca;
+.odoo-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+  box-shadow: 0 8px 24px rgba(109,40,217,.45), 0 2px 6px rgba(109,40,217,.3);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(79,70,229,.35), 0 2px 4px rgba(79,70,229,.2);
 }
-.pro-btn:active:not(:disabled) {
-  background: #3730a3;
+.odoo-btn:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(79,70,229,.22);
+  box-shadow: 0 2px 8px rgba(109,40,217,.3);
 }
-.pro-btn:disabled { opacity: .55; cursor: not-allowed; }
+.odoo-btn:disabled { opacity: .55; cursor: not-allowed; }
 
-/* ── LEFT PANEL ── */
-.pro-left {
-  background: linear-gradient(140deg, #1e1b4b 0%, #312e81 40%, #4338ca 75%, #6366f1 100%);
-}
-
-/* ── FORM CARD ── */
-.pro-card {
-  background: #fff;
-  border: 1px solid #f1f5f9;
-  border-radius: 20px;
-  padding: 36px 32px;
-  box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 32px rgba(0,0,0,.07);
-}
-
-/* ── DIVIDER ── */
-.pro-divider {
-  display: flex; align-items: center; gap: 12px;
-  color: #94a3b8; font-size: 12px; font-weight: 500;
-}
-.pro-divider::before, .pro-divider::after {
-  content: ''; flex: 1; height: 1px; background: #f1f5f9;
-}
-
-/* ── SECONDARY BUTTON ── */
-.pro-btn-outline {
-  width: 100%;
+/* ── ODOO OUTLINE BUTTON ── */
+.odoo-outline {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; padding: 11px 20px;
   background: transparent;
-  border: 1.5px solid #e2e8f0;
-  color: #475569;
-  font-weight: 600;
-  font-size: 13px;
-  padding: 10px 20px;
-  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  color: #374151;
+  font-weight: 600; font-size: 13.5px;
   cursor: pointer;
-  transition: border-color .2s, background .2s, color .2s;
-  text-align: center;
-  display: block;
+  transition: all .2s ease;
   text-decoration: none;
 }
-.pro-btn-outline:hover {
-  border-color: #a5b4fc;
-  color: #4f46e5;
-  background: #f5f3ff;
+.odoo-outline:hover {
+  border-color: #7c3aed;
+  color: #7c3aed;
+  background: rgba(124,58,237,.04);
 }
+
+/* ── ODOO CARD ── */
+.odoo-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 36px;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.05),
+    0 4px 6px -1px rgba(0,0,0,.05),
+    0 20px 40px -8px rgba(0,0,0,.1);
+}
+
+/* ── GLASS CARD (left panel floating) ── */
+.glass-card {
+  background: rgba(255,255,255,.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.2);
+}
+
+/* ── RULE CHECKER ── */
+.rule-met  { color: #a78bfa; }
+.rule-no   { color: rgba(255,255,255,.35); }
+.rule-dot-met { background:#a78bfa; border-color:#a78bfa; }
+.rule-dot-no  { border-color:rgba(255,255,255,.25); }
