@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import RouteGuard from '@/components/RouteGuard'
 import { useAuth } from '@/context/AuthContext'
 import { useCart } from '@/context/CartContext'
 
@@ -15,13 +16,19 @@ export default function ShopLayout({ children }) {
     router.push('/login')
   }
 
+  // Browsing is public; ordering/profile require a signed-in customer.
   const navLinks = [
     { href: '/shop', label: 'Products' },
-    { href: '/orders', label: 'My Orders' },
-    { href: '/profile', label: 'Profile' },
+    ...(user?.role === 'customer'
+      ? [
+          { href: '/orders', label: 'My Orders' },
+          { href: '/profile', label: 'Profile' },
+        ]
+      : []),
   ]
 
   return (
+    <RouteGuard allow={['customer']} publicPaths={['/shop', '/product']}>
     <div className="min-h-screen flex flex-col bg-gray-50">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -86,6 +93,14 @@ export default function ShopLayout({ children }) {
                   </button>
                 </div>
               )}
+              {!user && (
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-white bg-indigo-700 hover:bg-indigo-800 px-4 py-1.5 rounded-lg transition"
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -109,5 +124,6 @@ export default function ShopLayout({ children }) {
         </div>
       </footer>
     </div>
+    </RouteGuard>
   )
 }

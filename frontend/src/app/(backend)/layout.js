@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Sidebar from '@/components/Sidebar'
+import RouteGuard from '@/components/RouteGuard'
 import { useAuth } from '@/context/AuthContext'
 
 export default function BackendLayout({ children }) {
@@ -8,6 +9,7 @@ export default function BackendLayout({ children }) {
   const { user, logout } = useAuth()
 
   return (
+    <RouteGuard allow={['admin', 'vendor']}>
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar open={open} onClose={() => setOpen(false)} />
       <div className="flex flex-1 flex-col">
@@ -41,5 +43,6 @@ export default function BackendLayout({ children }) {
         <main className="flex-1 p-4 md:p-6">{children}</main>
       </div>
     </div>
+    </RouteGuard>
   )
 }
