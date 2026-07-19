@@ -81,10 +81,7 @@ export default function LoginPage() {
             <span className="text-2xl font-black text-white">R</span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-white">RentEase</h1>
-          <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: '#818cf8' }} />
-            <span className="text-[11px] font-semibold tracking-wide text-indigo-200">Odoo × KSV Hackathon 2026</span>
-          </div>
+          <p className="mt-1.5 text-sm font-medium tracking-wide text-indigo-200/80">Rental Management Platform</p>
         </div>
 
         {/* card */}
