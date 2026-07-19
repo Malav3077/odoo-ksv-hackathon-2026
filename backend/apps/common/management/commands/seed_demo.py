@@ -115,14 +115,33 @@ class Command(BaseCommand):
 
         if not RentalOrder.objects.filter(customer=customer).exists():
             now = timezone.now()
-            self._order(customer, products[0], now + timedelta(days=1), now + timedelta(days=4), admin, "reserved")
-            self._order(customer, products[1], now - timedelta(days=5), now - timedelta(days=1), admin, "returned")
-            self._order(customer, products[2], now - timedelta(hours=30), now - timedelta(hours=6), admin, "late_return")
-            self._order(customer, products[3], now + timedelta(days=2), now + timedelta(days=5), admin, "quotation")
-            self._order(customer, vendor_products[0], now + timedelta(days=1), now + timedelta(days=3), vendor, "reserved")
-            self._order(customer, vendor_products[1], now - timedelta(days=4), now - timedelta(days=1), vendor, "returned")
-            self._order(customer, vendor_products[2], now - timedelta(hours=28), now - timedelta(hours=5), vendor, "late_return")
-            self.stdout.write("Created demo orders for admin and vendor.")
+            # (product, pickup_offset_days, return_offset_days, actor, state, created_days_ago)
+            # created_days_ago spreads booking dates across the last 2 weeks so the
+            # revenue trend has a real curve instead of a single spike.
+            plan = [
+                (products[1],        -13, -10, admin,  "returned",    13),
+                (products[5],        -12,  -9, admin,  "returned",    12),
+                (products[8],        -11,  -8, vendor, "returned",    11),
+                (products[3],         -9,  -6, admin,  "returned",     9),
+                (products[10],        -8,  -5, admin,  "returned",     8),
+                (products[6],         -7,  -4, vendor, "returned",     7),
+                (products[2],         -6,  -3, admin,  "late_return",   6),
+                (products[9],         -5,  -2, admin,  "returned",      5),
+                (products[4],         -4,  -1, admin,  "returned",      4),
+                (vendor_products[1],  -4,  -1, vendor, "returned",      3),
+                (products[0],         -2,  +2, admin,  "picked_up",     2),  # active, return upcoming
+                (products[11],        -3,  -1, admin,  "picked_up",     3),  # still out -> overdue
+                (products[7],         +1,  +4, admin,  "reserved",      1),  # upcoming pickup
+                (vendor_products[0],  +2,  +5, vendor, "reserved",      0),  # upcoming pickup
+                (products[3],         +2,  +5, admin,  "quotation",     0),
+            ]
+            for product, pu, rt, actor, state, cdays in plan:
+                self._order(
+                    customer, product,
+                    now + timedelta(days=pu), now + timedelta(days=rt),
+                    actor, state, created_days_ago=cdays,
+                )
+            self.stdout.write("Created demo orders spread over the last 14 days.")
 
         self.stdout.write(self.style.SUCCESS("Demo data seeded. Login: admin@demo.com / Admin@123"))
 
@@ -136,25 +155,23 @@ class Command(BaseCommand):
             user.save()
         return user
 
-    def _order(self, customer, product, pickup, ret, admin, state):
-        if state == "quotation":
-            rental_services.create_order(
-                customer=customer,
-                lines=[{"product": product, "quantity": 1}],
-                pickup_date=pickup,
-                return_date=ret,
-                created_by=admin,
-                confirm=False,
-            )
-            return
+    def _order(self, customer, product, pickup, ret, admin, state, created_days_ago=None):
+        confirm = state != "quotation"
         order = rental_services.create_order(
             customer=customer,
             lines=[{"product": product, "quantity": 1}],
             pickup_date=pickup,
             return_date=ret,
             created_by=admin,
-            confirm=True,
+            confirm=confirm,
         )
+        # Backdate the booking (auto_now_add can't be set at creation, so update()).
+        if created_days_ago is not None:
+            RentalOrder.objects.filter(pk=order.pk).update(
+                created_at=timezone.now() - timedelta(days=created_days_ago)
+            )
+        if not confirm:
+            return
         billing_services.generate_invoice(order)
         billing_services.record_payments(order)
         if state == "reserved":
@@ -164,3 +181,4 @@ class Command(BaseCommand):
             rental_services.settle_return(order, admin, when=ret - timedelta(hours=1))
         elif state == "late_return":
             rental_services.settle_return(order, admin, when=ret + timedelta(hours=6))
+        # "picked_up" -> leave the order out (drives active / overdue counts)
