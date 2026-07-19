@@ -10,6 +10,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Odoo brand plum — overrides purple & indigo across the whole app
+        odoo: {
+          50: '#f8f4f7', 100: '#f0e6ee', 200: '#e0cddc', 300: '#c9a8c2',
+          400: '#ab7ba1', 500: '#8d5a80', 600: '#714B67', 700: '#5d3e55',
+          800: '#4b3245', 900: '#3a2736', 950: '#231521',
+        },
+        purple: {
+          50: '#f8f4f7', 100: '#f0e6ee', 200: '#e0cddc', 300: '#c9a8c2',
+          400: '#ab7ba1', 500: '#8d5a80', 600: '#714B67', 700: '#5d3e55',
+          800: '#4b3245', 900: '#3a2736', 950: '#231521',
+        },
+        indigo: {
+          50: '#f8f4f7', 100: '#f0e6ee', 200: '#e0cddc', 300: '#c9a8c2',
+          400: '#ab7ba1', 500: '#8d5a80', 600: '#714B67', 700: '#5d3e55',
+          800: '#4b3245', 900: '#3a2736', 950: '#231521',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
