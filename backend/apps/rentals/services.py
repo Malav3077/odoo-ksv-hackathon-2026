@@ -9,7 +9,10 @@ from apps.common.models import ActivityLog
 
 from .models import RentalOrder, RentalOrderLine
 
-TAX_RATE = Decimal("0.10")
+def _tax_rate():
+    from apps.common.models import OrganizationSettings
+
+    return OrganizationSettings.load().tax_percent / Decimal("100")
 
 
 def _check_stock(lines):
@@ -49,7 +52,7 @@ def _generate_reference(order):
 
 def _recalculate_totals(order):
     untaxed = sum((line.amount for line in order.lines.all()), Decimal("0"))
-    tax = (untaxed * TAX_RATE).quantize(Decimal("0.01"))
+    tax = (untaxed * _tax_rate()).quantize(Decimal("0.01"))
     order.untaxed_amount = untaxed
     order.tax_amount = tax
     order.total_amount = untaxed + tax

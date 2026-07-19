@@ -10,6 +10,7 @@ urlpatterns = [
     path("api/", include("apps.rentals.urls")),
     path("api/", include("apps.billing.urls")),
     path("api/", include("apps.reports.urls")),
+    path("api/", include("apps.common.urls")),
 ]
 
 if settings.DEBUG:
