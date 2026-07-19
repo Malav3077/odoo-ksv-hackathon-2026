@@ -37,10 +37,10 @@ class Command(BaseCommand):
         furniture = Category.objects.get_or_create(name="Furniture")[0]
 
         catalog = [
-            ("Sony DSLR Camera", electronics, 1500, 8, 2, 200, 5000, "https://picsum.photos/seed/camera/400/300"),
-            ("DJI Drone", electronics, 2500, 5, 1, 300, 8000, "https://picsum.photos/seed/drone/400/300"),
-            ("Camping Tent (4-person)", furniture, 600, 12, 4, 80, 1500, "https://picsum.photos/seed/tent/400/300"),
-            ("Office Chair", furniture, 300, 20, 6, 50, 800, "https://picsum.photos/seed/chair/400/300"),
+            ("Sony DSLR Camera", electronics, 1500, 8, 2, 200, 5000, "https://loremflickr.com/500/400/dslr,camera?lock=11"),
+            ("DJI Drone", electronics, 2500, 5, 1, 300, 8000, "https://loremflickr.com/500/400/drone?lock=22"),
+            ("Camping Tent (4-person)", furniture, 600, 12, 4, 80, 1500, "https://loremflickr.com/500/400/camping,tent?lock=33"),
+            ("Office Chair", furniture, 300, 20, 6, 50, 800, "https://loremflickr.com/500/400/office,chair?lock=44"),
         ]
         products = []
         for name, cat, price, qty, grace, late_fee, deposit, img in catalog:
