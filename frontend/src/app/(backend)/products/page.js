@@ -80,6 +80,15 @@ export default function ProductsPage() {
     setProducts(prev => prev.map(p => p.id === id ? { ...p, quantity_on_hand: newQty } : p))
   }
 
+  async function handlePublish(product) {
+    try {
+      const res = await api.post(`/products/${product.id}/publish/`, { is_published: !product.is_published })
+      setProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_published: res.data.is_published } : p))
+    } catch (err) {
+      alert(err.response?.status === 403 ? 'Only an admin can publish products.' : 'Could not update.')
+    }
+  }
+
   const filtered = products.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     (p.category_name || '').toLowerCase().includes(search.toLowerCase())
@@ -180,9 +189,13 @@ export default function ProductsPage() {
                       <StockEditor product={product} onUpdate={handleUpdate} />
                     </td>
                     <td className="px-4 py-4">
-                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${product.is_published ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                        {product.is_published ? 'Published' : 'Draft'}
-                      </span>
+                      <button
+                        onClick={() => handlePublish(product)}
+                        title="Click to toggle (admin only)"
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition hover:opacity-80 ${product.is_published ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}
+                      >
+                        {product.is_published ? 'Published' : 'Draft — Publish?'}
+                      </button>
                     </td>
                   </tr>
                 ))}
