@@ -35,12 +35,25 @@ class Command(BaseCommand):
 
         electronics = Category.objects.get_or_create(name="Electronics")[0]
         furniture = Category.objects.get_or_create(name="Furniture")[0]
+        outdoor = Category.objects.get_or_create(name="Outdoor")[0]
+        party = Category.objects.get_or_create(name="Party & Events")[0]
+
+        def img(keyword, lock):
+            return f"https://loremflickr.com/500/400/{keyword}?lock={lock}"
 
         catalog = [
-            ("Sony DSLR Camera", electronics, 1500, 8, 2, 200, 5000, "https://loremflickr.com/500/400/dslr,camera?lock=11"),
-            ("DJI Drone", electronics, 2500, 5, 1, 300, 8000, "https://loremflickr.com/500/400/drone?lock=22"),
-            ("Camping Tent (4-person)", furniture, 600, 12, 4, 80, 1500, "https://loremflickr.com/500/400/camping,tent?lock=33"),
-            ("Office Chair", furniture, 300, 20, 6, 50, 800, "https://loremflickr.com/500/400/office,chair?lock=44"),
+            ("Sony DSLR Camera", electronics, 1500, 8, 2, 200, 5000, img("dslr,camera", 11)),
+            ("DJI Drone", electronics, 2500, 5, 1, 300, 8000, img("drone", 22)),
+            ("HD Projector", electronics, 800, 6, 2, 100, 3000, img("projector", 12)),
+            ("PlayStation 5 Console", electronics, 700, 10, 2, 150, 4000, img("playstation,console", 13)),
+            ("MacBook Pro Laptop", electronics, 1200, 6, 1, 200, 6000, img("macbook,laptop", 14)),
+            ("Office Chair", furniture, 300, 20, 6, 50, 800, img("office,chair", 44)),
+            ("Leather Sofa Set", furniture, 900, 6, 6, 80, 3000, img("sofa", 15)),
+            ("Dining Table", furniture, 500, 8, 6, 60, 2000, img("dining,table", 16)),
+            ("Camping Tent (4-person)", outdoor, 600, 12, 4, 80, 1500, img("camping,tent", 33)),
+            ("Sleeping Bag", outdoor, 150, 25, 4, 20, 400, img("sleeping,bag", 17)),
+            ("Mountain Bike", outdoor, 400, 10, 2, 70, 2500, img("mountain,bike", 18)),
+            ("DJ Sound System", party, 1800, 4, 2, 250, 7000, img("dj,speaker", 19)),
         ]
         products = []
         for name, cat, price, qty, grace, late_fee, deposit, img in catalog:
