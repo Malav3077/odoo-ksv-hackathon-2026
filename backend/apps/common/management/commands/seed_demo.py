@@ -56,14 +56,14 @@ class Command(BaseCommand):
             ("DJ Sound System", party, 1800, 4, 2, 250, 7000, img("1571330735066-03aaa9429d89")),
         ]
         products = []
-        for name, cat, price, qty, grace, late_fee, deposit, img in catalog:
+        for name, cat, price, qty, grace, late_fee, deposit, image in catalog:
             product, created = Product.objects.get_or_create(
                 name=name,
                 defaults={
                     "category": cat,
                     "sales_price": price,
                     "quantity_on_hand": qty,
-                    "image_url": img,
+                    "image_url": image,
                     "is_published": True,
                     "created_by": admin,
                 },
@@ -80,13 +80,44 @@ class Command(BaseCommand):
 
         PriceList.objects.get_or_create(name="Default Pricelist", defaults={"is_default": True})
 
+        vendor_catalog = [
+            ("Canon Cinema Camera", electronics, 2000, 4, 2, 250, 6000, img("1516035069371-29a1b244cc32")),
+            ("Wireless Speaker", party, 500, 10, 2, 80, 1500, img("1571330735066-03aaa9429d89")),
+            ("LED Projector", electronics, 900, 6, 2, 120, 3500, img("1626379953822-baec19c3accd")),
+        ]
+        vendor_products = []
+        for name, cat, price, qty, grace, late_fee, deposit, image in vendor_catalog:
+            product, created = Product.objects.get_or_create(
+                name=name,
+                defaults={
+                    "category": cat,
+                    "sales_price": price,
+                    "quantity_on_hand": qty,
+                    "image_url": image,
+                    "is_published": True,
+                    "created_by": vendor,
+                },
+            )
+            if created:
+                RentalConfig.objects.create(
+                    product=product,
+                    periodicity="daily",
+                    padding_time=grace,
+                    late_fee_per_hour=late_fee,
+                    security_deposit_amount=deposit,
+                )
+            vendor_products.append(product)
+
         if not RentalOrder.objects.filter(customer=customer).exists():
             now = timezone.now()
             self._order(customer, products[0], now + timedelta(days=1), now + timedelta(days=4), admin, "reserved")
             self._order(customer, products[1], now - timedelta(days=5), now - timedelta(days=1), admin, "returned")
             self._order(customer, products[2], now - timedelta(hours=30), now - timedelta(hours=6), admin, "late_return")
             self._order(customer, products[3], now + timedelta(days=2), now + timedelta(days=5), admin, "quotation")
-            self.stdout.write("Created demo orders (reserved, returned, late_return, quotation).")
+            self._order(customer, vendor_products[0], now + timedelta(days=1), now + timedelta(days=3), vendor, "reserved")
+            self._order(customer, vendor_products[1], now - timedelta(days=4), now - timedelta(days=1), vendor, "returned")
+            self._order(customer, vendor_products[2], now - timedelta(hours=28), now - timedelta(hours=5), vendor, "late_return")
+            self.stdout.write("Created demo orders for admin and vendor.")
 
         self.stdout.write(self.style.SUCCESS("Demo data seeded. Login: admin@demo.com / Admin@123"))
 
