@@ -41,6 +41,11 @@ class Command(BaseCommand):
         def img(photo_id):
             return f"https://images.unsplash.com/photo-{photo_id}?w=500&h=400&fit=crop"
 
+        def media_img(name):
+            import re
+            slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+            return f"http://localhost:8000/media/products/{slug}.jpg"
+
         catalog = [
             ("Sony DSLR Camera", electronics, 1500, 8, 2, 200, 5000, img("1516035069371-29a1b244cc32")),
             ("DJI Drone", electronics, 2500, 5, 1, 300, 8000, img("1508614589041-895b88991e3e")),
@@ -63,7 +68,7 @@ class Command(BaseCommand):
                     "category": cat,
                     "sales_price": price,
                     "quantity_on_hand": qty,
-                    "image_url": image,
+                    "image_url": media_img(name),
                     "is_published": True,
                     "created_by": admin,
                 },
@@ -93,7 +98,7 @@ class Command(BaseCommand):
                     "category": cat,
                     "sales_price": price,
                     "quantity_on_hand": qty,
-                    "image_url": image,
+                    "image_url": media_img(name),
                     "is_published": True,
                     "created_by": vendor,
                 },
