@@ -11,8 +11,10 @@ from apps.common.permissions import IsCustomer
 
 from .models import CustomerAddress, User
 from .serializers import (
+    ChangePasswordSerializer,
     CustomerAddressSerializer,
     LoginSerializer,
+    ProfileUpdateSerializer,
     RegisterSerializer,
     UserSerializer,
     VendorRegisterSerializer,
@@ -105,6 +107,36 @@ class MeView(APIView):
 
     def get(self, request):
         return Response(UserSerializer(request.user).data)
+
+    def patch(self, request):
+        serializer = ProfileUpdateSerializer(request.user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        ActivityLog.objects.create(user=request.user, action="Updated profile")
+        return Response(UserSerializer(request.user).data)
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        if not user.check_password(serializer.validated_data["old_password"]):
+            return Response(
+                {"old_password": ["Current password is incorrect."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if serializer.validated_data["old_password"] == serializer.validated_data["new_password"]:
+            return Response(
+                {"new_password": ["New password must be different from the current one."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        user.set_password(serializer.validated_data["new_password"])
+        user.save()
+        ActivityLog.objects.create(user=user, action="Changed password")
+        return Response({"detail": "Password changed successfully."})
 
 
 class PasswordResetView(APIView):
