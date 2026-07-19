@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import StatTile from '@/components/StatTile'
 import StatusBadge from '@/components/StatusBadge'
+import { RevenueTrendChart, StatusDonut, TopProductsBars } from '@/components/DashboardCharts'
 import api from '@/lib/api'
 
 const ic = 'h-5 w-5'
@@ -25,17 +26,20 @@ function fmt(val) {
 
 export default function DashboardPage() {
   const [stats, setStats] = useState(null)
+  const [charts, setCharts] = useState(null)
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function load() {
       try {
-        const [sRes, oRes] = await Promise.all([
+        const [sRes, cRes, oRes] = await Promise.all([
           api.get('/dashboard/stats/'),
+          api.get('/dashboard/charts/'),
           api.get('/dashboard/orders/?ordering=-created_at'),
         ])
         setStats(sRes.data)
+        setCharts(cRes.data)
         const data = oRes.data
         setOrders((Array.isArray(data) ? data : data.results || []).slice(0, 5))
       } catch {}
@@ -80,50 +84,62 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* Charts row */}
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {/* Attention panel */}
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div className="lg:col-span-2">
+          <RevenueTrendChart data={charts?.revenue_trend} loading={loading} />
+        </div>
+        <StatusDonut data={charts?.status_breakdown} loading={loading} />
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <TopProductsBars data={charts?.top_products} loading={loading} />
+
+        {/* Attention panel (spans the remaining two columns) */}
+        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-2">
           <h2 className="mb-4 text-base font-semibold text-gray-800">Needs Attention</h2>
           {loading ? (
-            <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-4 animate-pulse rounded bg-gray-200" />)}</div>
+            <div className="grid gap-3 sm:grid-cols-3">{[1,2,3].map(i => <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-100" />)}</div>
           ) : (
-            <div className="space-y-3">
+            <div className="grid gap-3 sm:grid-cols-3">
               {stats?.overdue_rentals > 0 && (
                 <div className="flex items-center gap-3 rounded-xl bg-red-50 p-3">
-                  <span className="text-red-500 text-lg">⚠️</span>
+                  <span className="text-lg text-red-500">⚠️</span>
                   <div>
-                    <p className="text-sm font-semibold text-red-700">{stats.overdue_rentals} Overdue Return{stats.overdue_rentals !== 1 ? 's' : ''}</p>
-                    <p className="text-xs text-red-500">Items not returned on time</p>
+                    <p className="text-sm font-semibold text-red-700">{stats.overdue_rentals}</p>
+                    <p className="text-xs text-red-500">Overdue return{stats.overdue_rentals !== 1 ? 's' : ''}</p>
                   </div>
                 </div>
               )}
               {stats?.rentals_due_today > 0 && (
                 <div className="flex items-center gap-3 rounded-xl bg-amber-50 p-3">
-                  <span className="text-amber-500 text-lg">📅</span>
+                  <span className="text-lg text-amber-500">📅</span>
                   <div>
-                    <p className="text-sm font-semibold text-amber-700">{stats.rentals_due_today} Due Today</p>
-                    <p className="text-xs text-amber-500">Returns expected today</p>
+                    <p className="text-sm font-semibold text-amber-700">{stats.rentals_due_today}</p>
+                    <p className="text-xs text-amber-500">Due today</p>
                   </div>
                 </div>
               )}
               {stats?.upcoming_pickups > 0 && (
                 <div className="flex items-center gap-3 rounded-xl bg-indigo-50 p-3">
-                  <span className="text-indigo-500 text-lg">📦</span>
+                  <span className="text-lg text-indigo-500">📦</span>
                   <div>
-                    <p className="text-sm font-semibold text-indigo-700">{stats.upcoming_pickups} Pending Pickup{stats.upcoming_pickups !== 1 ? 's' : ''}</p>
-                    <p className="text-xs text-indigo-400">Customers yet to collect</p>
+                    <p className="text-sm font-semibold text-indigo-700">{stats.upcoming_pickups}</p>
+                    <p className="text-xs text-indigo-400">Pending pickup{stats.upcoming_pickups !== 1 ? 's' : ''}</p>
                   </div>
                 </div>
               )}
               {!stats?.overdue_rentals && !stats?.rentals_due_today && !stats?.upcoming_pickups && (
-                <div className="py-6 text-center text-gray-400 text-sm">All clear — nothing urgent!</div>
+                <div className="col-span-full py-6 text-center text-sm text-gray-400">All clear — nothing urgent!</div>
               )}
             </div>
           )}
         </div>
+      </div>
 
-        {/* Recent orders */}
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-2">
+      {/* Recent orders */}
+      <div className="mt-4">
+        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-base font-semibold text-gray-800">Recent Orders</h2>
             <Link href="/pickup-return" className="text-xs text-purple-600 hover:underline font-medium">View all →</Link>

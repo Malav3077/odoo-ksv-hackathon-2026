@@ -1,6 +1,7 @@
 from datetime import timedelta
 
-from django.db.models import Q, Sum
+from django.db.models import Count, Q, Sum
+from django.db.models.functions import TruncDate
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
@@ -8,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.common.permissions import IsAdminOrVendor
-from apps.rentals.models import RentalOrder
+from apps.rentals.models import RentalOrder, RentalOrderLine
 from apps.rentals.serializers import RentalOrderSerializer
 
 ACTIVE_STATUSES = ["reserved", "picked_up", "late_pickup"]
@@ -61,6 +62,71 @@ class DashboardStatsView(APIView):
             ),
         }
         return Response(data)
+
+
+class DashboardChartsView(APIView):
+    """Aggregated, chart-ready data derived live from the order tables."""
+
+    permission_classes = [IsAdminOrVendor]
+
+    def get(self, request):
+        now = timezone.now()
+        qs = _scoped_orders(request.user)
+        billable = qs.exclude(status__in=["quotation", "quotation_sent", "cancelled"])
+
+        # 1) Revenue trend — last 14 days, zero-filled so the axis is continuous.
+        days = 14
+        start = (now - timedelta(days=days - 1)).date()
+        buckets = {start + timedelta(days=i): 0.0 for i in range(days)}
+        rows = (
+            billable.filter(created_at__date__gte=start)
+            .annotate(day=TruncDate("created_at"))
+            .values("day")
+            .annotate(total=Sum("total_amount"))
+        )
+        for row in rows:
+            if row["day"] in buckets:
+                buckets[row["day"]] = float(row["total"] or 0)
+        revenue_trend = [
+            {"date": day.isoformat(), "label": day.strftime("%d %b"), "revenue": value}
+            for day, value in sorted(buckets.items())
+        ]
+
+        # 2) Order status breakdown — counts per status, only non-empty ones.
+        label_map = dict(RentalOrder.STATUS_CHOICES)
+        counts = {
+            row["status"]: row["count"]
+            for row in qs.values("status").annotate(count=Count("id"))
+        }
+        status_breakdown = [
+            {"status": status, "label": label_map.get(status, status), "count": counts[status]}
+            for status, _ in RentalOrder.STATUS_CHOICES
+            if counts.get(status)
+        ]
+
+        # 3) Top rented products — by total quantity, with revenue.
+        top = (
+            RentalOrderLine.objects.filter(order__in=qs)
+            .values("product__name")
+            .annotate(quantity=Sum("quantity"), revenue=Sum("amount"))
+            .order_by("-quantity")[:5]
+        )
+        top_products = [
+            {
+                "name": item["product__name"],
+                "quantity": item["quantity"] or 0,
+                "revenue": float(item["revenue"] or 0),
+            }
+            for item in top
+        ]
+
+        return Response(
+            {
+                "revenue_trend": revenue_trend,
+                "status_breakdown": status_breakdown,
+                "top_products": top_products,
+            }
+        )
 
 
 class DashboardOrdersView(generics.ListAPIView):
