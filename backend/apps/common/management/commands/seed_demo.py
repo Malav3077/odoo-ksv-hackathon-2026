@@ -38,22 +38,22 @@ class Command(BaseCommand):
         outdoor = Category.objects.get_or_create(name="Outdoor")[0]
         party = Category.objects.get_or_create(name="Party & Events")[0]
 
-        def img(keyword, lock):
-            return f"https://loremflickr.com/500/400/{keyword}?lock={lock}"
+        def img(photo_id):
+            return f"https://images.unsplash.com/photo-{photo_id}?w=500&h=400&fit=crop"
 
         catalog = [
-            ("Sony DSLR Camera", electronics, 1500, 8, 2, 200, 5000, img("dslr,camera", 11)),
-            ("DJI Drone", electronics, 2500, 5, 1, 300, 8000, img("drone", 22)),
-            ("HD Projector", electronics, 800, 6, 2, 100, 3000, img("projector", 12)),
-            ("PlayStation 5 Console", electronics, 700, 10, 2, 150, 4000, img("playstation,console", 13)),
-            ("MacBook Pro Laptop", electronics, 1200, 6, 1, 200, 6000, img("macbook,laptop", 14)),
-            ("Office Chair", furniture, 300, 20, 6, 50, 800, img("office,chair", 44)),
-            ("Leather Sofa Set", furniture, 900, 6, 6, 80, 3000, img("sofa", 15)),
-            ("Dining Table", furniture, 500, 8, 6, 60, 2000, img("dining,table", 16)),
-            ("Camping Tent (4-person)", outdoor, 600, 12, 4, 80, 1500, img("camping,tent", 33)),
-            ("Sleeping Bag", outdoor, 150, 25, 4, 20, 400, img("sleeping,bag", 17)),
-            ("Mountain Bike", outdoor, 400, 10, 2, 70, 2500, img("mountain,bike", 18)),
-            ("DJ Sound System", party, 1800, 4, 2, 250, 7000, img("dj,speaker", 19)),
+            ("Sony DSLR Camera", electronics, 1500, 8, 2, 200, 5000, img("1516035069371-29a1b244cc32")),
+            ("DJI Drone", electronics, 2500, 5, 1, 300, 8000, img("1508614589041-895b88991e3e")),
+            ("HD Projector", electronics, 800, 6, 2, 100, 3000, img("1626379953822-baec19c3accd")),
+            ("PlayStation 5 Console", electronics, 700, 10, 2, 150, 4000, img("1606813907291-d86efa9b94db")),
+            ("MacBook Pro Laptop", electronics, 1200, 6, 1, 200, 6000, img("1517336714731-489689fd1ca8")),
+            ("Office Chair", furniture, 300, 20, 6, 50, 800, img("1580480055273-228ff5388ef8")),
+            ("Leather Sofa Set", furniture, 900, 6, 6, 80, 3000, img("1555041469-a586c61ea9bc")),
+            ("Dining Table", furniture, 500, 8, 6, 60, 2000, img("1617806118233-18e1de247200")),
+            ("Camping Tent (4-person)", outdoor, 600, 12, 4, 80, 1500, img("1504280390367-361c6d9f38f4")),
+            ("Sleeping Bag", outdoor, 150, 25, 4, 20, 400, img("1520095972714-909e91b038e5")),
+            ("Mountain Bike", outdoor, 400, 10, 2, 70, 2500, img("1576435728678-68d0fbf94e91")),
+            ("DJ Sound System", party, 1800, 4, 2, 250, 7000, img("1571330735066-03aaa9429d89")),
         ]
         products = []
         for name, cat, price, qty, grace, late_fee, deposit, img in catalog:
