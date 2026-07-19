@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import api from '@/lib/api'
+import AddProductModal from '@/components/AddProductModal'
 
 function StockBadge({ qty }) {
   if (qty === 0) return <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-700"><span className="w-1.5 h-1.5 rounded-full bg-red-500" />Out of Stock</span>
@@ -61,6 +62,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [showAdd, setShowAdd] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -88,12 +90,16 @@ export default function ProductsPage() {
 
   return (
     <div>
+      <AddProductModal open={showAdd} onClose={() => setShowAdd(false)} onCreated={load} />
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Products & Stock</h1>
           <p className="mt-1 text-sm text-gray-500">Click the edit icon to update stock for any product.</p>
         </div>
-        <div className="flex gap-2 text-sm">
+        <div className="flex items-center gap-2 text-sm">
+          <button onClick={() => setShowAdd(true)} className="rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-semibold px-4 py-1.5 transition">
+            + Add Product
+          </button>
           {outOfStock > 0 && (
             <span className="rounded-lg bg-red-50 border border-red-200 px-3 py-1.5 text-red-700 font-medium">
               {outOfStock} Out of Stock
