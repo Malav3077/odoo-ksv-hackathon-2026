@@ -10,21 +10,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Odoo brand plum — overrides purple & indigo across the whole app
+        // Modern SaaS indigo — the app's primary. `odoo` and `indigo` map here,
+        // `purple` maps to violet, so every legacy purple/indigo class rethemes centrally.
         odoo: {
-          50: '#faf4f8', 100: '#f3e6ef', 200: '#e8cfe0', 300: '#d6a9c7',
-          400: '#c07ba7', 500: '#a5568a', 600: '#883f70', 700: '#702963',
-          800: '#5c2352', 900: '#4c1e44', 950: '#2d0f28',
-        },
-        purple: {
-          50: '#faf4f8', 100: '#f3e6ef', 200: '#e8cfe0', 300: '#d6a9c7',
-          400: '#c07ba7', 500: '#a5568a', 600: '#883f70', 700: '#702963',
-          800: '#5c2352', 900: '#4c1e44', 950: '#2d0f28',
+          50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc',
+          400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+          800: '#3730a3', 900: '#312e81', 950: '#1e1b4b',
         },
         indigo: {
-          50: '#faf4f8', 100: '#f3e6ef', 200: '#e8cfe0', 300: '#d6a9c7',
-          400: '#c07ba7', 500: '#a5568a', 600: '#883f70', 700: '#702963',
-          800: '#5c2352', 900: '#4c1e44', 950: '#2d0f28',
+          50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc',
+          400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+          800: '#3730a3', 900: '#312e81', 950: '#1e1b4b',
+        },
+        purple: {
+          50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd',
+          400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9',
+          800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065',
         },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

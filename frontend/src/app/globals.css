@@ -10,28 +10,28 @@
     --card-foreground: 215 28% 17%;
     --popover: 0 0% 100%;
     --popover-foreground: 215 28% 17%;
-    --primary: 318 47% 30%;
+    --primary: 243 75% 59%;
     --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 96%;
     --secondary-foreground: 215 25% 25%;
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
-    --accent: 210 40% 94%;
-    --accent-foreground: 215 28% 20%;
+    --accent: 226 100% 97%;
+    --accent-foreground: 243 55% 41%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 318 47% 30%;
+    --ring: 243 75% 59%;
     --radius: 0.5rem;
-    --sidebar-background: 215 28% 17%;
-    --sidebar-foreground: 210 30% 85%;
-    --sidebar-primary: 311 46% 38%;
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 215 20% 78%;
+    --sidebar-primary: 243 75% 62%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 25% 24%;
-    --sidebar-accent-foreground: 210 30% 88%;
-    --sidebar-border: 215 25% 22%;
-    --sidebar-ring: 311 46% 38%;
+    --sidebar-accent: 222 33% 19%;
+    --sidebar-accent-foreground: 215 25% 90%;
+    --sidebar-border: 222 25% 22%;
+    --sidebar-ring: 243 75% 62%;
   }
 
   .dark {
@@ -41,27 +41,27 @@
     --card-foreground: 210 40% 95%;
     --popover: 215 28% 13%;
     --popover-foreground: 210 40% 95%;
-    --primary: 311 48% 48%;
+    --primary: 243 75% 66%;
     --primary-foreground: 0 0% 100%;
     --secondary: 215 25% 18%;
     --secondary-foreground: 210 30% 88%;
     --muted: 215 25% 18%;
     --muted-foreground: 215 16% 56%;
-    --accent: 215 25% 22%;
+    --accent: 222 33% 20%;
     --accent-foreground: 210 30% 88%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --border: 215 25% 22%;
     --input: 215 25% 22%;
-    --ring: 311 48% 48%;
-    --sidebar-background: 215 28% 10%;
+    --ring: 243 75% 66%;
+    --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 30% 85%;
-    --sidebar-primary: 311 48% 48%;
+    --sidebar-primary: 243 75% 66%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 25% 18%;
+    --sidebar-accent: 222 33% 16%;
     --sidebar-accent-foreground: 210 30% 85%;
-    --sidebar-border: 215 25% 18%;
-    --sidebar-ring: 311 48% 48%;
+    --sidebar-border: 222 25% 18%;
+    --sidebar-ring: 243 75% 66%;
   }
 
   * { @apply border-border; }
@@ -124,11 +124,11 @@ body {
 .odoo-left {
   background: linear-gradient(145deg,
     #0f172a 0%,
-    #1e293b 20%,
-    #2d0f28 45%,
-    #4c1e44 70%,
-    #702963 88%,
-    #883f70 100%
+    #1e293b 18%,
+    #1e1b4b 42%,
+    #312e81 66%,
+    #4338ca 86%,
+    #4f46e5 100%
   );
   position: relative;
 }
@@ -137,7 +137,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(220deg, rgba(112,41,99,.25) 0%, transparent 50%, rgba(67,56,202,.15) 100%);
+  background: linear-gradient(220deg, rgba(99,102,241,.28) 0%, transparent 50%, rgba(124,58,237,.18) 100%);
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
   pointer-events: none;
@@ -158,8 +158,8 @@ body {
 }
 .odoo-input::placeholder { color: #9ca3af; }
 .odoo-input:focus {
-  border-color: #883f70;
-  box-shadow: 0 0 0 3px rgba(112,41,99,.12);
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79,70,229,.14);
 }
 .odoo-input.e {
   border-color: #ef4444;
@@ -175,7 +175,7 @@ body {
   gap: 8px;
   width: 100%;
   padding: 12px 20px;
-  background: linear-gradient(135deg, #883f70 0%, #702963 100%);
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
   color: #fff;
   font-weight: 600;
   font-size: 14.5px;
@@ -184,17 +184,17 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: all .22s ease;
-  box-shadow: 0 4px 14px rgba(112,41,99,.35), 0 1px 3px rgba(112,41,99,.2);
+  box-shadow: 0 4px 14px rgba(79,70,229,.35), 0 1px 3px rgba(79,70,229,.2);
   letter-spacing: .01em;
 }
 .odoo-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #702963 0%, #5c2352 100%);
-  box-shadow: 0 8px 24px rgba(112,41,99,.45), 0 2px 6px rgba(112,41,99,.25);
+  background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+  box-shadow: 0 8px 24px rgba(79,70,229,.45), 0 2px 6px rgba(79,70,229,.25);
   transform: translateY(-1px);
 }
 .odoo-btn:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(112,41,99,.25);
+  box-shadow: 0 2px 8px rgba(79,70,229,.25);
 }
 .odoo-btn:disabled { opacity: .55; cursor: not-allowed; }
 
@@ -212,9 +212,9 @@ body {
   text-decoration: none;
 }
 .odoo-outline:hover {
-  border-color: #883f70;
-  color: #883f70;
-  background: rgba(112,41,99,.05);
+  border-color: #4f46e5;
+  color: #4f46e5;
+  background: rgba(79,70,229,.05);
 }
 
 /* ── ODOO CARD ── */
@@ -240,9 +240,9 @@ body {
 }
 
 /* ── RULE CHECKER ── */
-.rule-met  { color: #c07ba7; }
+.rule-met  { color: #a5b4fc; }
 .rule-no   { color: rgba(255,255,255,.35); }
-.rule-dot-met { background:#c07ba7; border-color:#c07ba7; }
+.rule-dot-met { background:#a5b4fc; border-color:#a5b4fc; }
 .rule-dot-no  { border-color:rgba(255,255,255,.25); }
 
 @keyframes fadeInUp {

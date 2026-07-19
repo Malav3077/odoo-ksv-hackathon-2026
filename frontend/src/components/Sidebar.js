@@ -81,7 +81,7 @@ export default function Sidebar({ open, onClose }) {
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-30 flex h-screen w-64 transform flex-col bg-gradient-to-b from-purple-900 via-purple-800 to-indigo-900 text-white shadow-xl transition-transform duration-300 md:sticky md:top-0 md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-30 flex h-screen w-64 transform flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950 text-white shadow-xl transition-transform duration-300 md:sticky md:top-0 md:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
